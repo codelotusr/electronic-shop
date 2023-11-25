@@ -1,7 +1,5 @@
 package com.coursework.eshop;
 
-import com.coursework.eshop.model.Address;
-import com.coursework.eshop.model.Card;
 import com.coursework.eshop.model.Customer;
 
 import java.time.LocalDate;
@@ -25,10 +23,10 @@ public class Start {
 
             switch (cmd) {
                 case 1:
-                    System.out.println("create customer: username;password;b-date(yyyy-mm-dd);first-name;last-name;address(country;city;street;house-number);card(number;card-holder;expiration-date(yyyy-mm-dd);cvv);");
+                    System.out.println("create customer: username;password;b-date(yyyy-mm-dd);first-name;last-name;address;card-no");
                     String values = scanner.nextLine();
                     String[] info = values.split(";");
-                    Customer customer = new Customer(info[0], info[1], LocalDate.parse(info[2]), info[3], info[4], new Address(info[5], info[6], info[7], info[8]), new Card(info[9], info[10], LocalDate.parse(info[11]), info[12]));
+                    Customer customer = new Customer(info[0], info[1], LocalDate.parse(info[2]), info[3], info[4], info[5], info[6]);
                     System.out.println(customer);
                     break;
                 case 2:

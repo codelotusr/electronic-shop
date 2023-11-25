@@ -1,0 +1,40 @@
+package com.coursework.eshop.model;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.time.LocalDate;
+
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+public class GraphicsCard extends Product {
+    private String memoryType;
+    private int memorySize;
+    private int memoryFrequency;
+    private int coreFrequency;
+    private int tdp;
+    private int powerSupply;
+
+    public GraphicsCard(int id, String name, String description, String memoryType, int memorySize, int memoryFrequency, int coreFrequency, int tdp, int powerSupply) {
+        super(id, name, description);
+        this.memoryType = memoryType;
+        this.memorySize = memorySize;
+        this.memoryFrequency = memoryFrequency;
+        this.coreFrequency = coreFrequency;
+        this.tdp = tdp;
+        this.powerSupply = powerSupply;
+    }
+
+    @Override
+    public String toString() {
+        return "GraphicsCard{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                '}';
+    }
+}

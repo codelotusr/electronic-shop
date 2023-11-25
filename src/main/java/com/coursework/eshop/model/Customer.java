@@ -13,13 +13,13 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Customer extends User {
-    private Address address;
-    private Card card;
+    private String address;
+    private String cardNo;
 
-    public Customer(String username, String password, LocalDate birthDate, String firstName, String lastName, Address address, Card card) {
+    public Customer(String username, String password, LocalDate birthDate, String firstName, String lastName, String address, String cardNo) {
         super(username, password, birthDate, firstName, lastName);
         this.address = address;
-        this.card = card;
+        this.cardNo = cardNo;
     }
 
     @Override
@@ -31,7 +31,6 @@ public class Customer extends User {
                 ", firstName=" + firstName +
                 ", lastName=" + lastName +
                 ", address=" + address +
-                ", card=" + card +
                 '}';
     }
 }

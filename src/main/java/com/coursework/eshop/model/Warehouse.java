@@ -4,12 +4,12 @@ import java.util.List;
 
 public class Warehouse {
     private int id;
-    private Address address;
+    private String address;
     private List<Product> productsInStock;
     // TODO add more fields
 
 
-    public Warehouse(Address address, List<Product> productsInStock) {
+    public Warehouse(String address, List<Product> productsInStock) {
         this.address = address;
         this.productsInStock = productsInStock;
     }
@@ -20,14 +20,6 @@ public class Warehouse {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public Address getAddress() {
-        return address;
-    }
-
-    public void setAddress(Address address) {
-        this.address = address;
     }
 
     public List<Product> getProductsInStock() {

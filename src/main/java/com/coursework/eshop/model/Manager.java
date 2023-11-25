@@ -14,7 +14,7 @@ import java.time.LocalDate;
 public class Manager extends User {
 
     private String employeeId;
-    private String medCertification;
+    private String medicalCertification;
     private LocalDate employmentDate;
     private boolean isAdministrator;
     public Manager(String username, String password, LocalDate birthDate, String firstName, String lastName) {

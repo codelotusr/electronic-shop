@@ -1,16 +1,16 @@
 package com.coursework.eshop.fxController;
 
-import com.coursework.eshop.model.Dairy;
+import com.coursework.eshop.model.GraphicsCard;
 import com.coursework.eshop.model.Product;
 import com.coursework.eshop.utils.DatabaseUtils;
 import javafx.fxml.Initializable;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ListView;
 
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
@@ -30,10 +30,15 @@ public class MainShopController implements Initializable {
                 int id = resultSet.getInt(1);
                 String title = resultSet.getString(2);
                 String description = resultSet.getString(3);
-                LocalDate expiryDate = resultSet.getDate(4).toLocalDate();
+                String memoryType = resultSet.getString(4);
+                int memorySize = resultSet.getInt(5);
+                int memoryFrequency = resultSet.getInt(6);
+                int coreFrequency = resultSet.getInt(7);
+                int tdp = resultSet.getInt(8);
+                int powerSupply = resultSet.getInt(9);
 
-                Dairy dairy = new Dairy(id, title, description, expiryDate);
-                productsFromDb.add(dairy);
+                GraphicsCard graphicsCard = new GraphicsCard(id, title, description, memoryType, memorySize, memoryFrequency, coreFrequency, tdp, powerSupply);
+                productsFromDb.add(graphicsCard);
             }
 
             productList.getItems().addAll(productsFromDb);
