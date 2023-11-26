@@ -22,8 +22,12 @@ public class Manager extends User {
     private boolean isAdministrator;
     @ManyToOne
     private Warehouse worksInWarehouse;
-    public Manager(String username, String password, LocalDate birthDate, String firstName, String lastName) {
+    public Manager(String username, String password, LocalDate birthDate, String firstName, String lastName, String employeeId, String medicalCertification, LocalDate employmentDate, boolean isAdministrator) {
         super(username, password, birthDate, firstName, lastName);
+        this.employeeId = employeeId;
+        this.medicalCertification = medicalCertification;
+        this.employmentDate = employmentDate;
+        this.isAdministrator = isAdministrator;
     }
 
 }

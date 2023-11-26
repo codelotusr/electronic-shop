@@ -9,6 +9,7 @@ import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -39,6 +40,10 @@ public class Warehouse implements Serializable {
     public Warehouse(String title, String address) {
         this.title = title;
         this.address = address;
+        this.inStockGraphicsCards = new ArrayList<>();
+        this.inStockMotherboards = new ArrayList<>();
+        this.inStockProcessors = new ArrayList<>();
+        this.managers = new ArrayList<>();
     }
 
 

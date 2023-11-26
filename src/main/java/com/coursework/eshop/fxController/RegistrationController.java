@@ -2,6 +2,7 @@ package com.coursework.eshop.fxController;
 
 import com.coursework.eshop.hibernateController.UserHibernate;
 import com.coursework.eshop.model.Customer;
+import com.coursework.eshop.model.Manager;
 import jakarta.persistence.EntityManagerFactory;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -48,7 +49,11 @@ public class RegistrationController {
     }
 
     public void createUser() {
-        // TO-DO: create user
         userHibernate.createUser(new Customer());
+        if (customerCheckBox.isSelected()) {
+            userHibernate.createUser(new Customer(loginField.getText(), passwordField.getText(), birthDateField.getValue(), nameField.getText(), surnameField.getText(), addressField.getText(), cardNoField.getText()));
+        } else {
+            // TO-DO
+        }
     }
 }

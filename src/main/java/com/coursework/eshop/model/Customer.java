@@ -26,8 +26,8 @@ public class Customer extends User {
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Cart> myPurchases;
 
-    public Customer(String username, String password, LocalDate birthDate, String firstName, String lastName, String address, String cardNo) {
-        super(username, password, birthDate, firstName, lastName);
+    public Customer(String login, String password, LocalDate birthDate, String name, String surname, String address, String cardNo) {
+        super(login, password, birthDate, name, surname);
         this.address = address;
         this.cardNo = cardNo;
     }

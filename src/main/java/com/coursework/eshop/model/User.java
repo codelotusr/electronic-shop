@@ -32,18 +32,21 @@ public abstract class User implements Serializable {
     @LazyCollection(LazyCollectionOption.FALSE)
     List<Comment> myComments;
 
-    public User(String username, String password, LocalDate birthDate, String firstName, String lastName) {
-        this.username = username;
+    public User(String login, String password, LocalDate birthDate, String name, String surname) {
+        this.username = login;
         this.password = password;
         this.birthDate = birthDate;
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.firstName = name;
+        this.lastName = surname;
     }
 
-    public User(String username, String password) {
-        this.username = username;
+    public User(int id, String login, String password, LocalDate birthDate) {
+        this.id = id;
+        this.username = login;
         this.password = password;
+        this.birthDate = birthDate;
     }
+
 
     @Override
     public String toString() {
