@@ -18,5 +18,5 @@ public class Comment {
     private String title;
     private String commentBody;
     @ManyToOne
-    private User user;
+    private User author;
 }

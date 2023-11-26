@@ -28,7 +28,7 @@ public abstract class User implements Serializable {
     LocalDate birthDate;
     String firstName;
     String lastName;
-    @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
     @LazyCollection(LazyCollectionOption.FALSE)
     List<Comment> myComments;
 
