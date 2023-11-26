@@ -1,32 +1,46 @@
 package com.coursework.eshop.model;
 
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
+import java.io.Serializable;
 import java.util.List;
 
-public class Warehouse {
+
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
+@Getter
+@Entity
+public class Warehouse implements Serializable {
+    @Id
+    @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
     private int id;
+    private String title;
     private String address;
-    private List<Product> productsInStock;
-    // TODO add more fields
+    @OneToMany(mappedBy = "worksInWarehouse", cascade = CascadeType.ALL)
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private List<Manager> managers;
+    @OneToMany(mappedBy = "warehouse", cascade = CascadeType.ALL)
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private List<Motherboard> inStockMotherboards;
+    @OneToMany(mappedBy = "warehouse", cascade = CascadeType.ALL)
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private List<GraphicsCard> inStockGraphicsCards;
+    @OneToMany(mappedBy = "warehouse", cascade = CascadeType.ALL)
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private List<Processor> inStockProcessors;
 
-
-    public Warehouse(String address, List<Product> productsInStock) {
+    public Warehouse(String title, String address) {
+        this.title = title;
         this.address = address;
-        this.productsInStock = productsInStock;
     }
 
-    public int getId() {
-        return id;
-    }
 
-    public void setId(int id) {
-        this.id = id;
-    }
 
-    public List<Product> getProductsInStock() {
-        return productsInStock;
-    }
-
-    public void setProductsInStock(List<Product> productsInStock) {
-        this.productsInStock = productsInStock;
-    }
 }

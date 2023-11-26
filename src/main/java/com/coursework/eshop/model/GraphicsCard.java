@@ -1,5 +1,6 @@
 package com.coursework.eshop.model;
 
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,6 +12,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Getter
 @Setter
+@Entity
 public class GraphicsCard extends Product {
     private String memoryType;
     private int memorySize;
@@ -19,8 +21,9 @@ public class GraphicsCard extends Product {
     private int tdp;
     private int powerSupply;
 
-    public GraphicsCard(int id, String name, String description, String memoryType, int memorySize, int memoryFrequency, int coreFrequency, int tdp, int powerSupply) {
-        super(id, name, description);
+
+    public GraphicsCard(String name, String description, String memoryType, int memorySize, int memoryFrequency, int coreFrequency, int tdp, int powerSupply) {
+        super(name, description);
         this.memoryType = memoryType;
         this.memorySize = memorySize;
         this.memoryFrequency = memoryFrequency;

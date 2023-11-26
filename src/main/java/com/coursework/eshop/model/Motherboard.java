@@ -1,5 +1,7 @@
 package com.coursework.eshop.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,6 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
+@Entity
 public class Motherboard extends Product {
     private String socket;
     private String chipset;
@@ -17,7 +20,7 @@ public class Motherboard extends Product {
     private String maxMemoryFrequency;
 
     public Motherboard(int id, String name, String description, String socket, String chipset, String memoryType, String maxMemorySize, String maxMemoryFrequency) {
-        super(id, name, description);
+        super(name, description);
         this.socket = socket;
         this.chipset = chipset;
         this.memoryType = memoryType;

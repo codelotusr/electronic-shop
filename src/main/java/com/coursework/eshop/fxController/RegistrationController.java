@@ -1,70 +1,54 @@
 package com.coursework.eshop.fxController;
 
-import com.coursework.eshop.utils.DatabaseUtils;
-import javafx.event.ActionEvent;
+import com.coursework.eshop.hibernateController.UserHibernate;
+import com.coursework.eshop.model.Customer;
+import jakarta.persistence.EntityManagerFactory;
+import javafx.fxml.FXML;
 import javafx.scene.control.*;
-
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.PreparedStatement;
 
 public class RegistrationController {
 
+    @FXML
     public TextField loginField;
+    @FXML
     public PasswordField repeatPasswordField;
+    @FXML
     public PasswordField passwordField;
+    @FXML
     public TextField nameField;
+    @FXML
     public TextField surnameField;
+    @FXML
     public RadioButton customerCheckBox;
+    @FXML
     public ToggleGroup userType;
+    @FXML
     public RadioButton managerCheckBox;
+    @FXML
     public DatePicker birthDateField;
+    @FXML
     public TextField employeeIdField;
+    @FXML
     public TextField medicalCertificateField;
+    @FXML
     public DatePicker employmentDateField;
+    @FXML
     public CheckBox isAdministratorCheck;
+    @FXML
     public TextField addressField;
+    @FXML
     public TextField cardNoField;
 
+    private EntityManagerFactory entityManagerFactory;
+    private UserHibernate userHibernate;
+
+    public void setData(EntityManagerFactory entityManagerFactory) {
+        this.entityManagerFactory = entityManagerFactory;
+        userHibernate = new UserHibernate(entityManagerFactory);
+    }
+
     public void createUser() {
-        try {
-            Connection connection = DatabaseUtils.connectDb();
-            PreparedStatement insertUser = null;
-            var sql = "";
-            if (managerCheckBox.isSelected()) {
-                sql = "INSERT INTO user (login, password, name, surname, birthDate, employeeId, medicalCertificate, employmentDate, isAdministrator, userType) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-                insertUser = connection.prepareStatement(sql);
-                insertUser.setString(1, loginField.getText());
-                insertUser.setString(2, passwordField.getText());
-                insertUser.setString(3, nameField.getText());
-                insertUser.setString(4, surnameField.getText());
-                insertUser.setDate(5, Date.valueOf(birthDateField.getValue()));
-                insertUser.setString(6, employeeIdField.getText());
-                insertUser.setString(7, medicalCertificateField.getText());
-                insertUser.setDate(8, Date.valueOf(employmentDateField.getValue()));
-                insertUser.setBoolean(9, isAdministratorCheck.isSelected());
-                insertUser.setString(10, "M");
-                insertUser.execute();
-
-            } else {
-                sql = "INSERT INTO user (login, password, name, surname, birthDate, address, cardNo, userType) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-                insertUser = connection.prepareStatement(sql);
-                insertUser.setString(1, loginField.getText());
-                insertUser.setString(2, passwordField.getText());
-                insertUser.setString(3, nameField.getText());
-                insertUser.setString(4, surnameField.getText());
-                insertUser.setDate(5, Date.valueOf(birthDateField.getValue()));
-                insertUser.setString(6, addressField.getText());
-                insertUser.setString(7, cardNoField.getText());
-                insertUser.setString(8, "C");
-                insertUser.execute();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-
-
-
+        // TO-DO: create user
+        userHibernate.createUser(new Customer());
     }
 }

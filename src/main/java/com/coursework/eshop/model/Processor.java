@@ -1,5 +1,8 @@
 package com.coursework.eshop.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,6 +12,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
+@Entity
 public class Processor extends Product {
     private String socket;
     private String core;
@@ -19,8 +23,8 @@ public class Processor extends Product {
     private String integratedGraphics;
     private String cooler;
 
-    public Processor(int id, String name, String description, String socket, String core, String coreFrequency, String turboFrequency, String techProcess, String tdp, String integratedGraphics, String cooler) {
-        super(id, name, description);
+    public Processor(String name, String description, String socket, String core, String coreFrequency, String turboFrequency, String techProcess, String tdp, String integratedGraphics, String cooler) {
+        super(name, description);
         this.socket = socket;
         this.core = core;
         this.coreFrequency = coreFrequency;
