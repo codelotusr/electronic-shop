@@ -19,8 +19,8 @@ public class Motherboard extends Product {
     private String maxMemorySize;
     private String maxMemoryFrequency;
 
-    public Motherboard(int id, String name, String description, String socket, String chipset, String memoryType, String maxMemorySize, String maxMemoryFrequency) {
-        super(name, description);
+    public Motherboard(int id, String title, String description, String socket, String chipset, String memoryType, String maxMemorySize, String maxMemoryFrequency) {
+        super(title, description);
         this.socket = socket;
         this.chipset = chipset;
         this.memoryType = memoryType;
@@ -32,7 +32,7 @@ public class Motherboard extends Product {
     public String toString() {
         return "Motherboard{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
+                ", name='" + title + '\'' +
                 ", description='" + description + '\'' +
                 '}';
     }

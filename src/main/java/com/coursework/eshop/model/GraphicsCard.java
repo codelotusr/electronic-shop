@@ -22,8 +22,8 @@ public class GraphicsCard extends Product {
     private int powerSupply;
 
 
-    public GraphicsCard(String name, String description, String memoryType, int memorySize, int memoryFrequency, int coreFrequency, int tdp, int powerSupply) {
-        super(name, description);
+    public GraphicsCard(String title, String description, String memoryType, int memorySize, int memoryFrequency, int coreFrequency, int tdp, int powerSupply) {
+        super(title, description);
         this.memoryType = memoryType;
         this.memorySize = memorySize;
         this.memoryFrequency = memoryFrequency;
@@ -36,7 +36,7 @@ public class GraphicsCard extends Product {
     public String toString() {
         return "GraphicsCard{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
+                ", name='" + title + '\'' +
                 ", description='" + description + '\'' +
                 '}';
     }

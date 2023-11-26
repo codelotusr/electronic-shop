@@ -35,7 +35,7 @@ public class Warehouse implements Serializable {
     private List<GraphicsCard> inStockGraphicsCards;
     @OneToMany(mappedBy = "warehouse", cascade = CascadeType.ALL)
     @LazyCollection(LazyCollectionOption.FALSE)
-    private List<Processor> inStockProcessors;
+    private List<CentralProcessingUnit> inStockProcessors;
 
     public Warehouse(String title, String address) {
         this.title = title;
@@ -45,7 +45,5 @@ public class Warehouse implements Serializable {
         this.inStockProcessors = new ArrayList<>();
         this.managers = new ArrayList<>();
     }
-
-
 
 }
