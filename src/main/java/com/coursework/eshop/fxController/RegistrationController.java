@@ -84,6 +84,7 @@ public class RegistrationController {
     }
 
     public void createUser() {
+        userHibernate = new UserHibernate(entityManagerFactory);
         if (customerCheckBox.isSelected()) {
             userHibernate.createUser(new Customer(loginField.getText(), passwordField.getText(), birthDateField.getValue(), nameField.getText(), surnameField.getText(), addressField.getText(), cardNoField.getText()));
         } else if (managerCheckBox.isSelected()) {
