@@ -22,41 +22,27 @@ public class UserHibernate {
         this.entityManagerFactory = entityManagerFactory;
     }
 
-
-    public void createUser(User user) {
-        EntityManager em = null;
+    public User getUserByCredentials(String username, String password) {
+        EntityManager entityManager = null;
         try {
-            em = getEntityManager();
-            em.getTransaction().begin();
-            em.persist(user);
-            em.getTransaction().commit();
+            entityManager = getEntityManager();
+            CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+            CriteriaQuery<User> query = cb.createQuery(User.class);
+            Root<User> root = query.from(User.class);
+            query.select(root).where(cb.and(cb.like(root.get("username"), username), cb.like(root.get("password"), password)));
+            Query q;
+
+            q = entityManager.createQuery(query);
+            return (User) q.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
         } finally {
-            if (em != null) em.close();
+            if (entityManager != null) entityManager.close();
         }
     }
 
     private EntityManager getEntityManager() {
         return entityManagerFactory.createEntityManager();
     }
-
-    public User getUserByCredentials(String username, String password) {
-        EntityManager em = null;
-        try {
-            em = getEntityManager();
-            CriteriaBuilder cb = em.getCriteriaBuilder();
-            CriteriaQuery<User> query = cb.createQuery(User.class);
-            Root<User> root = query.from(User.class);
-            query.select(root).where(cb.and(cb.like(root.get("username"), username), cb.like(root.get("password"), password)));
-            Query q;
-
-            q = em.createQuery(query);
-            return (User) q.getSingleResult();
-        } catch (NoResultException e) {
-            return null;
-        } finally {
-            if (em != null) em.close();
-        }
-    }
-
 
 }
