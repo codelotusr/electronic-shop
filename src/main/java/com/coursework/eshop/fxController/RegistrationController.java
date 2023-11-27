@@ -1,11 +1,19 @@
 package com.coursework.eshop.fxController;
 
+import com.coursework.eshop.StartGui;
 import com.coursework.eshop.hibernateController.UserHibernate;
 import com.coursework.eshop.model.Customer;
 import com.coursework.eshop.model.Manager;
 import jakarta.persistence.EntityManagerFactory;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.stage.Stage;
+
+import java.io.IOException;
 
 public class RegistrationController {
 
@@ -88,7 +96,7 @@ public class RegistrationController {
         if (customerCheckBox.isSelected()) {
             userHibernate.createUser(new Customer(loginField.getText(), passwordField.getText(), birthDateField.getValue(), nameField.getText(), surnameField.getText(), addressField.getText(), cardNoField.getText()));
         } else if (managerCheckBox.isSelected()) {
-            // TO-DO add manager
+            userHibernate.createUser(new Manager(loginField.getText(), passwordField.getText(), birthDateField.getValue(), nameField.getText(), surnameField.getText(), employeeIdField.getText(), medicalCertificateField.getText(), employmentDateField.getValue(), isAdministratorCheck.isSelected()));
         } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
@@ -96,5 +104,17 @@ public class RegistrationController {
             alert.setContentText("Please select user type");
             alert.showAndWait();
         }
+    }
+
+    public void returnToLogin() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(StartGui.class.getResource("login.fxml"));
+        Parent parent = fxmlLoader.load();
+        LoginController loginController = fxmlLoader.getController();
+        loginController.setData(entityManagerFactory);
+        Scene scene = new Scene(parent);
+        Stage stage = (Stage) loginField.getScene().getWindow();
+        stage.setTitle("Registration");
+        stage.setScene(scene);
+        stage.show();
     }
 }

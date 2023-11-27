@@ -21,7 +21,7 @@ public class Comment {
     private String commentBody;
     private LocalDate dateCreated;
     @ManyToOne
-    private User author;
+    User author;
 
     public Comment(String commentTitle, String commentBody, User author) {
         this.commentTitle = commentTitle;

@@ -23,7 +23,7 @@
       </RadioButton>
       <RadioButton fx:id="managerCheckBox" layoutX="133.0" layoutY="253.0" mnemonicParsing="false" text="Manager" toggleGroup="$userType" />
       <Button layoutX="385.0" layoutY="306.0" mnemonicParsing="false" onAction="#createUser" text="Create User" />
-      <Button layoutX="42.0" layoutY="306.0" mnemonicParsing="false" text="Return" />
+      <Button layoutX="42.0" layoutY="306.0" mnemonicParsing="false" onAction="#returnToLogin" text="Return" />
       <TextField fx:id="addressField" layoutX="242.0" layoutY="28.0" prefHeight="26.0" prefWidth="166.0" promptText="Enter home address:" />
       <TextField fx:id="cardNoField" layoutX="242.0" layoutY="65.0" prefHeight="26.0" prefWidth="166.0" promptText="Enter card No:" />
       <DatePicker fx:id="birthDateField" layoutX="42.0" layoutY="206.0" promptText="Enter birth date:" />

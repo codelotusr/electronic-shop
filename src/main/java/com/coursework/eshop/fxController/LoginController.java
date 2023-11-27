@@ -67,4 +67,8 @@ public class LoginController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         entityManagerFactory = Persistence.createEntityManagerFactory("coursework-eshop");
     }
+
+    public void setData(EntityManagerFactory entityManagerFactory) {
+        this.entityManagerFactory = entityManagerFactory;
+    }
 }
