@@ -1,6 +1,7 @@
 package com.coursework.eshop.fxController;
 
 import com.coursework.eshop.StartGui;
+import com.coursework.eshop.hibernateController.EntityManagerFactorySingleton;
 import com.coursework.eshop.hibernateController.UserHibernate;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
@@ -65,7 +66,7 @@ public class LoginController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        entityManagerFactory = Persistence.createEntityManagerFactory("coursework-eshop");
+        entityManagerFactory = EntityManagerFactorySingleton.getEntityManagerFactory();
     }
 
     public void setData(EntityManagerFactory entityManagerFactory) {
