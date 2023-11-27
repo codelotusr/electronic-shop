@@ -1,5 +1,6 @@
 package com.coursework.eshop.hibernateController;
 
+import com.coursework.eshop.fxController.JavaFxCustomUtils;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -26,7 +27,12 @@ public class GenericHibernate {
             entityManager.persist(entity);
             entityManager.getTransaction().commit();
         } catch (Exception e) {
-            e.printStackTrace();
+            JavaFxCustomUtils.generateAlert(
+                    javafx.scene.control.Alert.AlertType.ERROR,
+                    "Error",
+                    "Error",
+                    "Error while creating entity"
+            );
         } finally {
             if (entityManager != null) entityManager.close();
         }
@@ -40,7 +46,12 @@ public class GenericHibernate {
             result = entityManager.find(entityClass, id);
             entityManager.getTransaction().commit();
         } catch (Exception e) {
-            e.printStackTrace();
+            JavaFxCustomUtils.generateAlert(
+                    javafx.scene.control.Alert.AlertType.ERROR,
+                    "Error",
+                    "Error",
+                    "Error while reading entity"
+            );
         } finally {
             if (entityManager != null) entityManager.close();
         }
@@ -55,7 +66,12 @@ public class GenericHibernate {
             criteriaQuery.select(criteriaQuery.from(entityClass));
             result = entityManager.createQuery(criteriaQuery).getResultList();
         } catch (Exception e) {
-            e.printStackTrace();
+            JavaFxCustomUtils.generateAlert(
+                    javafx.scene.control.Alert.AlertType.ERROR,
+                    "Error",
+                    "Error",
+                    "Error while reading all records"
+            );
         } finally {
             if (entityManager != null) entityManager.close();
         }
@@ -69,7 +85,12 @@ public class GenericHibernate {
             entityManager.merge(entity);
             entityManager.getTransaction().commit();
         } catch (Exception e) {
-            e.printStackTrace();
+            JavaFxCustomUtils.generateAlert(
+                    javafx.scene.control.Alert.AlertType.ERROR,
+                    "Error",
+                    "Error",
+                    "Error while updating entity"
+            );
         } finally {
             if (entityManager != null) entityManager.close();
         }
@@ -82,7 +103,12 @@ public class GenericHibernate {
             entityManager.remove(entity);
             entityManager.getTransaction().commit();
         } catch (Exception e) {
-            e.printStackTrace();
+            JavaFxCustomUtils.generateAlert(
+                    javafx.scene.control.Alert.AlertType.ERROR,
+                    "Error",
+                    "Error",
+                    "Error while deleting entity"
+            );
         } finally {
             if (entityManager != null) entityManager.close();
         }

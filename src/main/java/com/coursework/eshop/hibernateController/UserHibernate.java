@@ -14,14 +14,11 @@ import jakarta.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserHibernate {
-
-    private EntityManagerFactory entityManagerFactory = null;
+public class UserHibernate extends GenericHibernate {
 
     public UserHibernate(EntityManagerFactory entityManagerFactory) {
-        this.entityManagerFactory = entityManagerFactory;
+        super(entityManagerFactory);
     }
-
     public User getUserByCredentials(String username, String password) {
         EntityManager entityManager = null;
         try {
@@ -39,10 +36,6 @@ public class UserHibernate {
         } finally {
             if (entityManager != null) entityManager.close();
         }
-    }
-
-    private EntityManager getEntityManager() {
-        return entityManagerFactory.createEntityManager();
     }
 
 }

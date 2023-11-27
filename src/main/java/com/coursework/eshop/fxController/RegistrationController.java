@@ -94,9 +94,9 @@ public class RegistrationController {
     public void createUser() {
         userHibernate = new UserHibernate(entityManagerFactory);
         if (customerCheckBox.isSelected()) {
-            userHibernate.createUser(new Customer(loginField.getText(), passwordField.getText(), birthDateField.getValue(), nameField.getText(), surnameField.getText(), addressField.getText(), cardNoField.getText()));
+            userHibernate.create(new Customer(loginField.getText(), passwordField.getText(), birthDateField.getValue(), nameField.getText(), surnameField.getText(), addressField.getText(), cardNoField.getText()));
         } else if (managerCheckBox.isSelected()) {
-            userHibernate.createUser(new Manager(loginField.getText(), passwordField.getText(), birthDateField.getValue(), nameField.getText(), surnameField.getText(), employeeIdField.getText(), medicalCertificateField.getText(), employmentDateField.getValue(), isAdministratorCheck.isSelected()));
+            userHibernate.create(new Manager(loginField.getText(), passwordField.getText(), birthDateField.getValue(), nameField.getText(), surnameField.getText(), employeeIdField.getText(), medicalCertificateField.getText(), employmentDateField.getValue(), isAdministratorCheck.isSelected()));
         } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
