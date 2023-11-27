@@ -70,6 +70,8 @@ public class RegistrationController {
             employmentDateField.setVisible(false);
             isAdministratorCheck.setVisible(false);
             managerCheckBox.setVisible(false);
+            customerCheckBox.setSelected(true);
+            customerCheckBox.setVisible(false);
         }
     }
 
