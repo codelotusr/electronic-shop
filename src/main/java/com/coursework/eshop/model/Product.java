@@ -1,9 +1,6 @@
 package com.coursework.eshop.model;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,7 +13,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @Getter
 @Setter
-@MappedSuperclass
+@Entity
 public class Product implements Serializable {
     @Id
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)

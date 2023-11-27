@@ -1,6 +1,7 @@
 package com.coursework.eshop.model;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @Setter
@@ -20,8 +22,8 @@ public class Manager extends User {
     private String medicalCertification;
     private LocalDate employmentDate;
     private boolean isAdministrator;
-    @ManyToOne
-    private Warehouse worksInWarehouse;
+    @ManyToMany
+    private List<Warehouse> worksAtWarehouse;
     public Manager(String username, String password, LocalDate birthDate, String firstName, String lastName, String employeeId, String medicalCertification, LocalDate employmentDate, boolean isAdministrator) {
         super(username, password, birthDate, firstName, lastName);
         this.employeeId = employeeId;
