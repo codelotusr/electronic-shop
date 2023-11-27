@@ -96,11 +96,12 @@ public class GenericHibernate {
         }
     }
 
-    public <T> void delete(T entity) {
+    public <T> void delete(Class<T> entityClass, int id) {
         try {
             entityManager = getEntityManager();
             entityManager.getTransaction().begin();
-            entityManager.remove(entity);
+            var object = entityManager.find(entityClass, id);
+            entityManager.remove(object);
             entityManager.getTransaction().commit();
         } catch (Exception e) {
             JavaFxCustomUtils.generateAlert(

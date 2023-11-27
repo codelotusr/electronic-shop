@@ -56,9 +56,9 @@ public class LoginController implements Initializable {
         } else {
             JavaFxCustomUtils.generateAlert(
                     Alert.AlertType.INFORMATION,
-                    "Login INFO",
-                    "Wrong credentials",
-                    "Wrong login or password"
+                    "Login failed",
+                    "Invalid credentials",
+                    "Wrong username or password"
             );
         }
 

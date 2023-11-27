@@ -19,17 +19,24 @@ public class GraphicsCard extends Product {
     private int memoryFrequency;
     private int coreFrequency;
     private int tdp;
-    private int powerSupply;
 
 
-    public GraphicsCard(String title, String description, String memoryType, int memorySize, int memoryFrequency, int coreFrequency, int tdp, int powerSupply) {
+    public GraphicsCard(String title, String description, String memoryType, int memorySize, int memoryFrequency, int coreFrequency, int tdp) {
         super(title, description);
         this.memoryType = memoryType;
         this.memorySize = memorySize;
         this.memoryFrequency = memoryFrequency;
         this.coreFrequency = coreFrequency;
         this.tdp = tdp;
-        this.powerSupply = powerSupply;
+    }
+
+    public GraphicsCard(String title, String description, String manufacturer, Warehouse warehouse, String memoryType, int memorySize, int memoryFrequency, int coreFrequency, int tdp) {
+        super(title, description, manufacturer, warehouse);
+        this.memoryType = memoryType;
+        this.memorySize = memorySize;
+        this.memoryFrequency = memoryFrequency;
+        this.coreFrequency = coreFrequency;
+        this.tdp = tdp;
     }
 
     @Override

@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 
 @NoArgsConstructor
@@ -33,16 +34,17 @@ public class Product implements Serializable {
         this.description = description;
     }
 
-    public Product(String title, String description, String manufacturer) {
-        this.title = title;
-        this.description = description;
-        this.manufacturer = manufacturer;
-    }
-
     public Product(String title, String description, String manufacturer, Warehouse warehouse) {
         this.title = title;
         this.description = description;
         this.manufacturer = manufacturer;
         this.warehouse = warehouse;
     }
+
+    public Product(String title, String description, String manufacturer) {
+        this.title = title;
+        this.description = description;
+        this.manufacturer = manufacturer;
+    }
+
 }

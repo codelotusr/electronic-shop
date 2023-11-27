@@ -43,4 +43,8 @@ public class Customer extends User {
                 ", address=" + address +
                 '}';
     }
+
+    public List<Cart> getCustomerCart() {
+        return myPurchases;
+    }
 }

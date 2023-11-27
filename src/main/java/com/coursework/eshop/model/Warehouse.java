@@ -38,4 +38,9 @@ public class Warehouse implements Serializable {
         this.managers = new ArrayList<>();
     }
 
+    @Override
+    public String toString() {
+        return title;
+    }
+
 }

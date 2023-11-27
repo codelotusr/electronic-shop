@@ -113,7 +113,7 @@ public class RegistrationController {
         loginController.setData(entityManagerFactory);
         Scene scene = new Scene(parent);
         Stage stage = (Stage) loginField.getScene().getWindow();
-        stage.setTitle("Registration");
+        stage.setTitle("Login");
         stage.setScene(scene);
         stage.show();
     }
