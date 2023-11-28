@@ -127,8 +127,8 @@ public class MainShopController implements Initializable {
     public TableColumn<ManagerTableParameters, Void> managerDummyColumn;
 
 
-    private ObservableList<CustomerTableParameters> customerTableParametersObservableList = FXCollections.observableArrayList();
-    private ObservableList<ManagerTableParameters> managerTableParametersObservableList = FXCollections.observableArrayList();
+    private final ObservableList<CustomerTableParameters> customerTableParametersObservableList = FXCollections.observableArrayList();
+    private final ObservableList<ManagerTableParameters> managerTableParametersObservableList = FXCollections.observableArrayList();
     private EntityManagerFactory entityManagerFactory;
     private User currentUser;
     private CustomHibernate customHibernate;
