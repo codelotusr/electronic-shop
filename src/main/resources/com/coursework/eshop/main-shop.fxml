@@ -32,8 +32,8 @@
                      <children>
                         <TableView fx:id="customerTable" layoutX="14.0" layoutY="14.0" prefHeight="179.0" prefWidth="569.0">
                           <columns>
-                            <TableColumn fx:id="customerIdColumn" prefWidth="55.0" text="ID" />
-                            <TableColumn fx:id="customerUsernameColumn" prefWidth="77.0" text="Username" />
+                            <TableColumn fx:id="customerIdColumn" prefWidth="37.0" text="ID" />
+                            <TableColumn fx:id="customerUsernameColumn" prefWidth="95.0" text="Username" />
                               <TableColumn fx:id="customerPasswordColumn" prefWidth="70.0" text="Password" />
                               <TableColumn fx:id="customerNameColumn" prefWidth="67.0" text="Name" />
                               <TableColumn fx:id="customerSurnameColumn" prefWidth="72.0" text="Surname" />
@@ -44,8 +44,15 @@
                         </TableView>
                         <TableView fx:id="managerTable" layoutX="14.0" layoutY="196.0" prefHeight="162.0" prefWidth="569.0">
                           <columns>
-                            <TableColumn prefWidth="75.0" text="C1" />
-                            <TableColumn prefWidth="75.0" text="C2" />
+                            <TableColumn fx:id="managerIdColumn" prefWidth="36.0" text="ID" />
+                            <TableColumn fx:id="managerUsernameColumn" prefWidth="68.0" text="Username" />
+                              <TableColumn fx:id="managerPasswordColumn" prefWidth="63.0" text="Password" />
+                              <TableColumn fx:id="managerNameColumn" prefWidth="58.0" text="Name" />
+                              <TableColumn fx:id="managerSurnameColumn" prefWidth="57.0" text="Surname" />
+                              <TableColumn fx:id="managerEmployeeIdColumn" prefWidth="76.0" text="Employee ID" />
+                              <TableColumn fx:id="managerMedicalCertificationColumn" prefWidth="62.0" text="Medical Certification" />
+                              <TableColumn fx:id="managerIsAdministratorColumn" prefWidth="67.0" text="Administrator" />
+                              <TableColumn fx:id="managerDummyColumn" prefWidth="81.0" text="Action" />
                           </columns>
                         </TableView>
                      </children></AnchorPane>

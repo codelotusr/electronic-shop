@@ -2,6 +2,7 @@ package com.coursework.eshop.fxController;
 
 import com.coursework.eshop.StartGui;
 import com.coursework.eshop.fxController.tableViews.CustomerTableParameters;
+import com.coursework.eshop.fxController.tableViews.ManagerTableParameters;
 import com.coursework.eshop.hibernateController.CustomHibernate;
 import com.coursework.eshop.model.*;
 import jakarta.persistence.EntityManagerFactory;
@@ -106,9 +107,28 @@ public class MainShopController implements Initializable {
     public TableColumn<CustomerTableParameters, String> customerSurnameColumn;
     @FXML
     public TableColumn<CustomerTableParameters, Void> dummyColumn;
+    @FXML
+    public TableColumn<ManagerTableParameters, Integer> managerIdColumn;
+    @FXML
+    public TableColumn<ManagerTableParameters, String> managerUsernameColumn;
+    @FXML
+    public TableColumn<ManagerTableParameters, String> managerPasswordColumn;
+    @FXML
+    public TableColumn<ManagerTableParameters, String> managerNameColumn;
+    @FXML
+    public TableColumn<ManagerTableParameters, String> managerSurnameColumn;
+    @FXML
+    public TableColumn<ManagerTableParameters, String> managerEmployeeIdColumn;
+    @FXML
+    public TableColumn<ManagerTableParameters, String> managerMedicalCertificationColumn;
+    @FXML
+    public TableColumn<ManagerTableParameters, Boolean> managerIsAdministratorColumn;
+    @FXML
+    public TableColumn<ManagerTableParameters, Void> managerDummyColumn;
 
 
     private ObservableList<CustomerTableParameters> customerTableParametersObservableList = FXCollections.observableArrayList();
+    private ObservableList<ManagerTableParameters> managerTableParametersObservableList = FXCollections.observableArrayList();
     private EntityManagerFactory entityManagerFactory;
     private User currentUser;
     private CustomHibernate customHibernate;
@@ -166,6 +186,77 @@ public class MainShopController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         productType.getItems().addAll(ProductType.values());
         customerTableParams();
+        managerTableParams();
+    }
+
+    private void managerTableParams() {
+        managerTable.setEditable(true);
+        managerIdColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        managerUsernameColumn.setCellValueFactory(new PropertyValueFactory<>("username"));
+        managerUsernameColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        managerUsernameColumn.setOnEditCommit(event -> {
+            event.getTableView().getItems().get(event.getTablePosition().getRow()).setUsername(event.getNewValue());
+            Manager manager = customHibernate.readEntityById(Manager.class, event.getTableView().getItems().get(event.getTablePosition().getRow()).getId());
+            manager.setUsername(event.getNewValue());
+            customHibernate.update(manager);
+        });
+        managerPasswordColumn.setCellValueFactory(new PropertyValueFactory<>("password"));
+        managerNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        managerNameColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        managerNameColumn.setOnEditCommit(event -> {
+            event.getTableView().getItems().get(event.getTablePosition().getRow()).setName(event.getNewValue());
+            Manager manager = customHibernate.readEntityById(Manager.class, event.getTableView().getItems().get(event.getTablePosition().getRow()).getId());
+            manager.setFirstName(event.getNewValue());
+            customHibernate.update(manager);
+        });
+        managerSurnameColumn.setCellValueFactory(new PropertyValueFactory<>("surname"));
+        managerSurnameColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        managerSurnameColumn.setOnEditCommit(event -> {
+            event.getTableView().getItems().get(event.getTablePosition().getRow()).setSurname(event.getNewValue());
+            Manager manager = customHibernate.readEntityById(Manager.class, event.getTableView().getItems().get(event.getTablePosition().getRow()).getId());
+            manager.setLastName(event.getNewValue());
+            customHibernate.update(manager);
+        });
+        managerEmployeeIdColumn.setCellValueFactory(new PropertyValueFactory<>("employeeId"));
+        managerEmployeeIdColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        managerEmployeeIdColumn.setOnEditCommit(event -> {
+            event.getTableView().getItems().get(event.getTablePosition().getRow()).setEmployeeId(event.getNewValue());
+            Manager manager = customHibernate.readEntityById(Manager.class, event.getTableView().getItems().get(event.getTablePosition().getRow()).getId());
+            manager.setEmployeeId(event.getNewValue());
+            customHibernate.update(manager);
+        });
+        managerMedicalCertificationColumn.setCellValueFactory(new PropertyValueFactory<>("medicalCertification"));
+        managerMedicalCertificationColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        managerMedicalCertificationColumn.setOnEditCommit(event -> {
+            event.getTableView().getItems().get(event.getTablePosition().getRow()).setMedicalCertification(event.getNewValue());
+            Manager manager = customHibernate.readEntityById(Manager.class, event.getTableView().getItems().get(event.getTablePosition().getRow()).getId());
+            manager.setMedicalCertification(event.getNewValue());
+            customHibernate.update(manager);
+        });
+        managerIsAdministratorColumn.setCellValueFactory(new PropertyValueFactory<>("isAdministrator"));
+
+        Callback<TableColumn<ManagerTableParameters, Void>, TableCell<ManagerTableParameters, Void>> callback = param -> {
+            return new TextFieldTableCell<>() {
+                private final Button deleteButton = new Button("Delete");
+                {
+                    deleteButton.setOnAction(event -> {
+                        ManagerTableParameters row = getTableView().getItems().get(getIndex());
+                        customHibernate.deleteManager(row.getId());
+                        managerTable.getItems().remove(row);
+                    });
+                }
+                @Override
+                public void updateItem(Void item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty) {
+                        setGraphic(null);
+                    } else {
+                        setGraphic(deleteButton);
+                    }
+                }
+            };
+        };
+        managerDummyColumn.setCellFactory(callback);
     }
 
     private void customerTableParams() {
@@ -240,6 +331,21 @@ public class MainShopController implements Initializable {
         }
         customerTable.setItems(customerTableParametersObservableList);
 
+        managerTable.getItems().clear();
+        List<Manager> managerList = customHibernate.readAllRecords(Manager.class);
+        for (Manager manager : managerList) {
+            ManagerTableParameters managerTableParameters = new ManagerTableParameters();
+            managerTableParameters.setId(manager.getId());
+            managerTableParameters.setUsername(manager.getUsername());
+            managerTableParameters.setPassword(manager.getPassword());
+            managerTableParameters.setName(manager.getFirstName());
+            managerTableParameters.setSurname(manager.getLastName());
+            managerTableParameters.setEmployeeId(manager.getEmployeeId());
+            managerTableParameters.setMedicalCertification(manager.getMedicalCertification());
+            managerTableParameters.setIsAdmin(manager.isAdministrator());
+            managerTableParametersObservableList.add(managerTableParameters);
+        }
+        managerTable.setItems(managerTableParametersObservableList);
     }
 
 
