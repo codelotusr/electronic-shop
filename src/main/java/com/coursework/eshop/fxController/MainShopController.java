@@ -8,7 +8,6 @@ import com.coursework.eshop.model.*;
 import jakarta.persistence.EntityManagerFactory;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -24,6 +23,7 @@ import javafx.util.Callback;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -171,8 +171,9 @@ public class MainShopController implements Initializable {
         if (currentUser.getClass() == Manager.class) {
             Manager manager = (Manager) currentUser;
             if (!manager.isAdministrator()) {
-                managerTable.setVisible(true);
+                managerTable.setVisible(false);
             }
+            tabPane.getTabs().remove(primaryTab);
         } else if (currentUser.getClass() == Customer.class) {
             Customer customer = (Customer) currentUser;
             tabPane.getTabs().remove(warehouseTab);
@@ -186,15 +187,6 @@ public class MainShopController implements Initializable {
                     "You have no access to this page",
                     "Please, contact your administrator");
         }
-    }
-
-    public void addToCart() {
-        Product selectedProduct = productList.getSelectionModel().getSelectedItem();
-        Cart cart = new Cart();
-        cart.setCustomer((Customer) currentUser);
-        cart.getItemsInCart().add(selectedProduct);
-        customHibernate.create(cart);
-        loadCartList();
     }
 
     @Override
@@ -528,6 +520,30 @@ public class MainShopController implements Initializable {
         customHibernate.create(new Comment(commentTitleField.getText(), commentBodyField.getText(), currentUser));
         loadCommentList();
     }
+
+    public void addToCart() {
+        Product selectedProduct = productList.getSelectionModel().getSelectedItem();
+        Cart cart;
+
+        // Check if the current user already has a cart
+        // This is a pseudo-code function, replace it with your actual method to get the user's cart
+        cart = customHibernate.findCartByCustomer((Customer) currentUser);
+
+        if (cart == null) {
+            cart = new Cart();
+            cart.setCustomer((Customer) currentUser);
+            cart.setItemsInCart(new ArrayList<>()); // Initialize the itemsInCart list
+        }
+
+        // Set the relationship on both sides
+        selectedProduct.setCart(cart);
+        cart.getItemsInCart().add(selectedProduct);
+
+        // Save or update the cart and product in the database
+        customHibernate.update(cart); // Assuming this method updates the cart and associated products
+        loadCartList();
+    }
+
 
     public void updateExistingComment() {
         Comment selectedComment = commentList.getSelectionModel().getSelectedItem();

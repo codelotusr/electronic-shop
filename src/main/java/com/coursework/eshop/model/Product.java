@@ -24,6 +24,7 @@ public class Product implements Serializable {
     String manufacturer;
 
     @ManyToOne
+    @JoinColumn(name = "cart_id")
     Cart cart;
 
     @ManyToOne
@@ -45,6 +46,11 @@ public class Product implements Serializable {
         this.title = title;
         this.description = description;
         this.manufacturer = manufacturer;
+    }
+
+    @Override
+    public String toString() {
+        return title + " " + manufacturer;
     }
 
 }

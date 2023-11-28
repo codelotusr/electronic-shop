@@ -37,12 +37,4 @@ public class Motherboard extends Product {
         this.maxMemoryFrequency = maxMemoryFrequency;
     }
 
-    @Override
-    public String toString() {
-        return "Motherboard{" +
-                "id=" + id +
-                ", name='" + title + '\'' +
-                ", description='" + description + '\'' +
-                '}';
-    }
 }

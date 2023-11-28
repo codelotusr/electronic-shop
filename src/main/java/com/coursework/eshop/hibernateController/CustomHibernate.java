@@ -1,17 +1,13 @@
 package com.coursework.eshop.hibernateController;
 
 import com.coursework.eshop.fxController.JavaFxCustomUtils;
-import com.coursework.eshop.model.Comment;
-import com.coursework.eshop.model.Product;
-import com.coursework.eshop.model.User;
-import com.coursework.eshop.model.Warehouse;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.NoResultException;
-import jakarta.persistence.Query;
+import com.coursework.eshop.model.*;
+import jakarta.persistence.*;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
+
+import java.util.List;
 
 public class CustomHibernate extends GenericHibernate {
     public CustomHibernate(EntityManagerFactory entityManagerFactory) {
@@ -166,4 +162,35 @@ public class CustomHibernate extends GenericHibernate {
             if (entityManager != null) entityManager.close();
         }
     }
+
+    public Cart findCartByCustomer(Customer customer) {
+        EntityManager entityManager = getEntityManager();
+        try {
+            CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+            CriteriaQuery<Cart> query = cb.createQuery(Cart.class);
+            Root<Cart> root = query.from(Cart.class);
+
+            query.select(root).where(cb.equal(root.get("customer"), customer));
+
+            TypedQuery<Cart> typedQuery = entityManager.createQuery(query);
+            List<Cart> carts = typedQuery.getResultList();
+
+            if (!carts.isEmpty()) {
+                return carts.get(0);
+            }
+            return null;
+        } catch (Exception e) {
+            JavaFxCustomUtils.generateAlert(
+                    javafx.scene.control.Alert.AlertType.ERROR,
+                    "Error",
+                    "Error",
+                    "Error while finding cart by customer");
+            return null;
+        } finally {
+            if (entityManager != null) entityManager.close();
+        }
+    }
+
+
+
 }

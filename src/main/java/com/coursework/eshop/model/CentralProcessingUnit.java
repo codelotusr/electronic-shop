@@ -33,14 +33,4 @@ public class CentralProcessingUnit extends Product {
         this.tdp = tdp;
     }
 
-    @Override
-    public String toString() {
-        return "Processor{" +
-                "id=" + id +
-                ", name='" + title + '\'' +
-                ", description='" + description + '\'' +
-                '}';
-    }
-
-
 }

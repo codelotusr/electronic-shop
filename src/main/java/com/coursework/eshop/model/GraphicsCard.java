@@ -39,12 +39,4 @@ public class GraphicsCard extends Product {
         this.tdp = tdp;
     }
 
-    @Override
-    public String toString() {
-        return "GraphicsCard{" +
-                "id=" + id +
-                ", name='" + title + '\'' +
-                ", description='" + description + '\'' +
-                '}';
-    }
 }

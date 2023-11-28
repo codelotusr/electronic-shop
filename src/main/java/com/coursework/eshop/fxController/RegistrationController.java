@@ -95,6 +95,7 @@ public class RegistrationController {
 
     public void createUser() throws IOException {
         customHibernate = new CustomHibernate(entityManagerFactory);
+        customerCheckBox.setSelected(true);
         if (customerCheckBox.isSelected() && validateInputCustomer()) {
             customHibernate.create(new Customer(loginField.getText(), passwordField.getText(), birthDateField.getValue(), nameField.getText(), surnameField.getText(), addressField.getText(), cardNoField.getText()));
             returnToLogin();
@@ -230,15 +231,6 @@ public class RegistrationController {
                     "Error",
                     "Error",
                     "Card number must contain only digits"
-            );
-        }
-        if (!addressField.getText().matches("[a-zA-Z0-9]+")) {
-            isValid = false;
-            JavaFxCustomUtils.generateAlert(
-                    Alert.AlertType.ERROR,
-                    "Error",
-                    "Error",
-                    "Address must contain only letters and digits"
             );
         }
         if (!nameField.getText().matches("[a-zA-Z]+")) {

@@ -9,6 +9,7 @@ import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -25,5 +26,28 @@ public class Cart {
     private Customer customer;
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
     @LazyCollection(LazyCollectionOption.FALSE)
-    private List<Product> itemsInCart;
+    private List<Product> itemsInCart = new ArrayList<>();
+
+
+    public Cart(LocalDate dateCreated, Customer customer) {
+        this.dateCreated = dateCreated;
+        this.customer = customer;
+    }
+
+    public Cart(LocalDate dateCreated) {
+        this.dateCreated = dateCreated;
+    }
+
+    public Cart(Customer customer) {
+        this.customer = customer;
+    }
+
+    @Override
+    public String toString() {
+        return itemsInCart.toString();
+    }
+
+
+
+
 }
