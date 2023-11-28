@@ -8,6 +8,7 @@ import com.coursework.eshop.model.*;
 import jakarta.persistence.EntityManagerFactory;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -130,6 +131,8 @@ public class MainShopController implements Initializable {
     public TableColumn<ManagerTableParameters, Void> managerDummyColumn;
     @FXML
     public AnchorPane mainAnchorPane;
+    @FXML
+    public ListView<Order> ordersList;
     @FXML
     private ColorPicker mainColorPicker;
     private final ObservableList<CustomerTableParameters> customerTableParametersObservableList = FXCollections.observableArrayList();
@@ -525,22 +528,18 @@ public class MainShopController implements Initializable {
         Product selectedProduct = productList.getSelectionModel().getSelectedItem();
         Cart cart;
 
-        // Check if the current user already has a cart
-        // This is a pseudo-code function, replace it with your actual method to get the user's cart
         cart = customHibernate.findCartByCustomer((Customer) currentUser);
 
         if (cart == null) {
             cart = new Cart();
             cart.setCustomer((Customer) currentUser);
-            cart.setItemsInCart(new ArrayList<>()); // Initialize the itemsInCart list
+            cart.setItemsInCart(new ArrayList<>());
         }
 
-        // Set the relationship on both sides
         selectedProduct.setCart(cart);
         cart.getItemsInCart().add(selectedProduct);
 
-        // Save or update the cart and product in the database
-        customHibernate.update(cart); // Assuming this method updates the cart and associated products
+        customHibernate.update(cart);
         loadCartList();
     }
 
@@ -586,10 +585,14 @@ public class MainShopController implements Initializable {
 
     public void removeFromCart() {
         Cart selectedCart = currentCartList.getSelectionModel().getSelectedItem();
-        customHibernate.deleteCart(selectedCart.getId());
+        Product selectedProduct = productList.getSelectionModel().getSelectedItem();
+        customHibernate.removeFromCart(selectedCart.getId(), selectedProduct.getId());
         loadCartList();
     }
 
     public void placeOrder() {
+    }
+
+    public void removeOrder() {
     }
 }

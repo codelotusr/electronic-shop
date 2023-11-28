@@ -78,13 +78,8 @@
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <TableView fx:id="orderTable" layoutX="14.0" layoutY="14.0" prefHeight="338.0" prefWidth="560.0">
-                          <columns>
-                            <TableColumn prefWidth="75.0" text="ID" />
-                            <TableColumn prefWidth="75.0" text="C2" />
-                              <TableColumn prefWidth="75.0" text="Column X" />
-                          </columns>
-                        </TableView>
+                        <ListView fx:id="ordersList" layoutX="14.0" layoutY="14.0" prefHeight="274.0" prefWidth="562.0" />
+                        <Button layoutX="250.0" layoutY="313.0" mnemonicParsing="false" onAction="#removeOrder" text="Remove order" />
                      </children></AnchorPane>
               </content>
             </Tab>

@@ -143,26 +143,6 @@ public class CustomHibernate extends GenericHibernate {
             if (entityManager != null) entityManager.close();
         }
     }
-
-    public void deleteCart(int id) {
-        EntityManager entityManager = getEntityManager();
-        try {
-            entityManager.getTransaction().begin();
-            var cart = entityManager.find(User.class, id);
-
-            entityManager.remove(cart);
-            entityManager.getTransaction().commit();
-        } catch (Exception e) {
-            JavaFxCustomUtils.generateAlert(
-                    javafx.scene.control.Alert.AlertType.ERROR,
-                    "Error",
-                    "Error",
-                    "Error while deleting cart");
-        } finally {
-            if (entityManager != null) entityManager.close();
-        }
-    }
-
     public Cart findCartByCustomer(Customer customer) {
         EntityManager entityManager = getEntityManager();
         try {
@@ -190,6 +170,74 @@ public class CustomHibernate extends GenericHibernate {
             if (entityManager != null) entityManager.close();
         }
     }
+
+    public void deleteCart(int id) {
+        EntityManager entityManager = getEntityManager();
+        try {
+            entityManager.getTransaction().begin();
+            Cart cart = entityManager.find(Cart.class, id);
+
+            if (cart != null) {
+                Customer customer = cart.getCustomer();
+                if (customer != null) {
+                    customer.getMyPurchases().remove(cart);
+                    entityManager.merge(customer);
+                }
+                entityManager.remove(cart);
+                entityManager.getTransaction().commit();
+            } else {
+                JavaFxCustomUtils.generateAlert(
+                        javafx.scene.control.Alert.AlertType.INFORMATION,
+                        "Information",
+                        "No Cart Found",
+                        "No cart found with the provided ID.");
+            }
+        } catch (Exception e) {
+            JavaFxCustomUtils.generateAlert(
+                    javafx.scene.control.Alert.AlertType.ERROR,
+                    "Error",
+                    "Error",
+                    "Error while deleting cart");
+        } finally {
+            if (entityManager != null) entityManager.close();
+        }
+    }
+
+    public void removeFromCart(int cartId, int productId) {
+        EntityManager entityManager = getEntityManager();
+        try {
+            entityManager.getTransaction().begin();
+
+            Cart cart = entityManager.find(Cart.class, cartId);
+            Product product = entityManager.find(Product.class, productId);
+
+            if (cart != null && product != null) {
+                cart.getItemsInCart().remove(product);
+                product.setCart(null);
+
+                entityManager.merge(cart);
+                entityManager.merge(product);
+
+                entityManager.getTransaction().commit();
+            } else {
+                JavaFxCustomUtils.generateAlert(
+                        javafx.scene.control.Alert.AlertType.INFORMATION,
+                        "Information",
+                        "No Cart or Product Found",
+                        "No cart or product found with the provided IDs.");
+            }
+        } catch (Exception e) {
+            JavaFxCustomUtils.generateAlert(
+                    javafx.scene.control.Alert.AlertType.ERROR,
+                    "Error",
+                    "Error",
+                    "Error while removing product from cart");
+        } finally {
+            if (entityManager != null) entityManager.close();
+        }
+    }
+
+
 
 
 
