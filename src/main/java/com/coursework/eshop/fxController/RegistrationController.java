@@ -1,11 +1,10 @@
 package com.coursework.eshop.fxController;
 
 import com.coursework.eshop.StartGui;
-import com.coursework.eshop.hibernateController.UserHibernate;
+import com.coursework.eshop.hibernateController.CustomHibernate;
 import com.coursework.eshop.model.Customer;
 import com.coursework.eshop.model.Manager;
 import jakarta.persistence.EntityManagerFactory;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -49,7 +48,8 @@ public class RegistrationController {
     public TextField cardNoField;
 
     private EntityManagerFactory entityManagerFactory;
-    private UserHibernate userHibernate;
+
+    private CustomHibernate customHibernate;
 
     public void setData(EntityManagerFactory entityManagerFactory, boolean showManagerFields) {
         this.entityManagerFactory = entityManagerFactory;
@@ -94,11 +94,11 @@ public class RegistrationController {
     }
 
     public void createUser() {
-        userHibernate = new UserHibernate(entityManagerFactory);
+        customHibernate = new CustomHibernate(entityManagerFactory);
         if (customerCheckBox.isSelected()) {
-            userHibernate.create(new Customer(loginField.getText(), passwordField.getText(), birthDateField.getValue(), nameField.getText(), surnameField.getText(), addressField.getText(), cardNoField.getText()));
+            customHibernate.create(new Customer(loginField.getText(), passwordField.getText(), birthDateField.getValue(), nameField.getText(), surnameField.getText(), addressField.getText(), cardNoField.getText()));
         } else if (managerCheckBox.isSelected()) {
-            userHibernate.create(new Manager(loginField.getText(), passwordField.getText(), birthDateField.getValue(), nameField.getText(), surnameField.getText(), employeeIdField.getText(), medicalCertificateField.getText(), employmentDateField.getValue(), isAdministratorCheck.isSelected()));
+            customHibernate.create(new Manager(loginField.getText(), passwordField.getText(), birthDateField.getValue(), nameField.getText(), surnameField.getText(), employeeIdField.getText(), medicalCertificateField.getText(), employmentDateField.getValue(), isAdministratorCheck.isSelected()));
         } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");

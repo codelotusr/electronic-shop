@@ -1,10 +1,9 @@
 package com.coursework.eshop.fxController;
 
 import com.coursework.eshop.StartGui;
+import com.coursework.eshop.hibernateController.CustomHibernate;
 import com.coursework.eshop.hibernateController.EntityManagerFactorySingleton;
-import com.coursework.eshop.hibernateController.UserHibernate;
 import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Persistence;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -26,7 +25,7 @@ public class LoginController implements Initializable {
     public PasswordField passwordField;
 
     private EntityManagerFactory entityManagerFactory;
-    private UserHibernate userHibernate;
+    private CustomHibernate customHibernate;
 
     public void registerNewUser() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(StartGui.class.getResource("registration.fxml"));
@@ -41,8 +40,8 @@ public class LoginController implements Initializable {
     }
 
     public void validateAndConnect() throws IOException {
-        userHibernate = new UserHibernate(entityManagerFactory);
-        User user = userHibernate.getUserByCredentials(loginField.getText(), passwordField.getText());
+        customHibernate = new CustomHibernate(entityManagerFactory);
+        User user = customHibernate.getUserByCredentials(loginField.getText(), passwordField.getText());
         if (user != null) {
             FXMLLoader fxmlLoader = new FXMLLoader(StartGui.class.getResource("main-shop.fxml"));
             Parent parent = fxmlLoader.load();
