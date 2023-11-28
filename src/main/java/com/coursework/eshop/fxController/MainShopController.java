@@ -1,16 +1,25 @@
 package com.coursework.eshop.fxController;
 
 import com.coursework.eshop.StartGui;
+import com.coursework.eshop.fxController.tableViews.CustomerTableParameters;
 import com.coursework.eshop.hibernateController.CustomHibernate;
 import com.coursework.eshop.model.*;
 import jakarta.persistence.EntityManagerFactory;
+import javafx.beans.Observable;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 
 import java.io.IOException;
 import java.net.URL;
@@ -33,10 +42,7 @@ public class MainShopController implements Initializable {
     public ListView<Warehouse> warehouseList;
     @FXML
     public Tab ordersTab;
-    @FXML
-    public TableView<Customer> customerTable;
-    @FXML
-    public TableView<Manager> managerTable;
+
     @FXML
     public TabPane tabPane;
     @FXML
@@ -83,10 +89,31 @@ public class MainShopController implements Initializable {
     public ListView<Comment> commentList;
     @FXML
     public Tab commentTab;
+    @FXML
+    public TableView customerTable;
+    @FXML
+    public TableView managerTable;
+    @FXML
+    public TableColumn<CustomerTableParameters, Integer> customerIdColumn;
+    @FXML
+    public TableColumn<CustomerTableParameters, String> customerUsernameColumn;
+    @FXML
+    public TableColumn<CustomerTableParameters, String> customerPasswordColumn;
+    @FXML
+    public TableColumn<CustomerTableParameters, String> customerAddressColumn;
+    @FXML
+    public TableColumn<CustomerTableParameters, String> customerCardNoColumn;
+    @FXML
+    public TableColumn<CustomerTableParameters, String> customerNameColumn;
+    @FXML
+    public TableColumn<CustomerTableParameters, String> customerSurnameColumn;
+    @FXML
+    public TableColumn<CustomerTableParameters, Void> dummyColumn;
 
+
+    private ObservableList<CustomerTableParameters> customerTableParametersObservableList = FXCollections.observableArrayList();
     private EntityManagerFactory entityManagerFactory;
     private User currentUser;
-
     private CustomHibernate customHibernate;
 
     public void setData(EntityManagerFactory entityManagerFactory, User user) {
@@ -141,6 +168,49 @@ public class MainShopController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         productType.getItems().addAll(ProductType.values());
+        customerTableParams();
+    }
+
+    private void customerTableParams() {
+        customerTable.setEditable(true);
+        customerIdColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        customerUsernameColumn.setCellValueFactory(new PropertyValueFactory<>("username"));
+        customerPasswordColumn.setCellValueFactory(new PropertyValueFactory<>("password"));
+        customerPasswordColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        customerPasswordColumn.setOnEditCommit(event -> {
+            event.getTableView().getItems().get(event.getTablePosition().getRow()).setPassword(event.getNewValue());
+            Customer customer = customHibernate.readEntityById(Customer.class, event.getTableView().getItems().get(event.getTablePosition().getRow()).getId());
+            customer.setPassword(event.getNewValue());
+            customHibernate.update(customer);
+        });
+        customerAddressColumn.setCellValueFactory(new PropertyValueFactory<>("address"));
+        customerCardNoColumn.setCellValueFactory(new PropertyValueFactory<>("cardNo"));
+        customerNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        customerSurnameColumn.setCellValueFactory(new PropertyValueFactory<>("surname"));
+
+        Callback<TableColumn<CustomerTableParameters, Void>, TableCell<CustomerTableParameters, Void>> callback = param -> {
+            final TableCell<CustomerTableParameters, Void> cell = new TextFieldTableCell<>() {
+                private final Button deleteButton = new Button("Delete");
+                {
+                    deleteButton.setOnAction(event -> {
+                        CustomerTableParameters row = getTableView().getItems().get(getIndex());
+                        customHibernate.delete(Customer.class, row.getId());
+                        customerTable.getItems().remove(row);
+                    });
+                }
+                @Override
+                public void updateItem(Void item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty) {
+                        setGraphic(null);
+                    } else {
+                        setGraphic(deleteButton);
+                    }
+                }
+            };
+            return cell;
+        };
+        dummyColumn.setCellFactory(callback);
     }
 
     public void loadTabValues() {
@@ -152,9 +222,30 @@ public class MainShopController implements Initializable {
             loadWarehouseList();
         } else if (commentTab.isSelected()) {
             loadCommentList();
+        } else if (usersTab.isSelected()) {
+            loadUserTables();
         }
 
     }
+
+    private void loadUserTables() {
+        customerTable.getItems().clear();
+        List<Customer> customerList = customHibernate.readAllRecords(Customer.class);
+        for (Customer customer : customerList) {
+            CustomerTableParameters customerTableParameters = new CustomerTableParameters();
+            customerTableParameters.setId(customer.getId());
+            customerTableParameters.setUsername(customer.getUsername());
+            customerTableParameters.setPassword(customer.getPassword());
+            customerTableParameters.setName(customer.getFirstName());
+            customerTableParameters.setSurname(customer.getLastName());
+            customerTableParameters.setAddress(customer.getAddress());
+            customerTableParameters.setCardNo(customer.getCardNo());
+            customerTableParametersObservableList.add(customerTableParameters);
+        }
+        customerTable.setItems(customerTableParametersObservableList);
+
+    }
+
 
     public void enableProductFields() {
         if(productType.getSelectionModel().getSelectedItem() == ProductType.CPU) {
@@ -310,10 +401,9 @@ public class MainShopController implements Initializable {
         loadCommentList();
     }
 
-    // TODO: FIX DELETE
     public void deleteExistingComment() {
         Comment selectedComment = commentList.getSelectionModel().getSelectedItem();
-        customHibernate.delete(Comment.class, selectedComment.getId());
+        customHibernate.deleteComment(selectedComment.getId());
         loadCommentList();
     }
 
@@ -322,5 +412,9 @@ public class MainShopController implements Initializable {
         commentTitleField.setText(selectedComment.getCommentTitle());
         commentBodyField.setText(selectedComment.getCommentBody());
 
+    }
+
+    public void exitShop() {
+        System.exit(0);
     }
 }

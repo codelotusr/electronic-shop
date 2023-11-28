@@ -32,8 +32,14 @@
                      <children>
                         <TableView fx:id="customerTable" layoutX="14.0" layoutY="14.0" prefHeight="179.0" prefWidth="569.0">
                           <columns>
-                            <TableColumn prefWidth="75.0" text="C1" />
-                            <TableColumn prefWidth="75.0" text="C2" />
+                            <TableColumn fx:id="customerIdColumn" prefWidth="55.0" text="ID" />
+                            <TableColumn fx:id="customerUsernameColumn" prefWidth="77.0" text="Username" />
+                              <TableColumn fx:id="customerPasswordColumn" prefWidth="70.0" text="Password" />
+                              <TableColumn fx:id="customerNameColumn" prefWidth="67.0" text="Name" />
+                              <TableColumn fx:id="customerSurnameColumn" prefWidth="72.0" text="Surname" />
+                              <TableColumn fx:id="customerAddressColumn" prefWidth="77.0" text="Address" />
+                              <TableColumn fx:id="customerCardNoColumn" prefWidth="68.0" text="Card NO" />
+                              <TableColumn fx:id="dummyColumn" prefWidth="82.0" text="Action" />
                           </columns>
                         </TableView>
                         <TableView fx:id="managerTable" layoutX="14.0" layoutY="196.0" prefHeight="162.0" prefWidth="569.0">
@@ -107,7 +113,8 @@
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <Button layoutX="220.0" layoutY="129.0" mnemonicParsing="false" onAction="#logout" prefHeight="65.0" prefWidth="150.0" text="Logout" />
+                        <Button layoutX="212.0" layoutY="99.0" mnemonicParsing="false" onAction="#logout" prefHeight="65.0" prefWidth="150.0" text="Logout" />
+                        <Button layoutX="211.0" layoutY="193.0" mnemonicParsing="false" onAction="#exitShop" prefHeight="70.0" prefWidth="151.0" text="Exit" />
                      </children>
                   </AnchorPane>
               </content>

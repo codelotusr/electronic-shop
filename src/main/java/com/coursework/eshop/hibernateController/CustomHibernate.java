@@ -1,6 +1,7 @@
 package com.coursework.eshop.hibernateController;
 
 import com.coursework.eshop.fxController.JavaFxCustomUtils;
+import com.coursework.eshop.model.Comment;
 import com.coursework.eshop.model.Product;
 import com.coursework.eshop.model.User;
 import com.coursework.eshop.model.Warehouse;
@@ -60,6 +61,31 @@ public class CustomHibernate extends GenericHibernate {
                     "Error",
                     "Error",
                     "Error while deleting product");
+        } finally {
+            if (entityManager != null) entityManager.close();
+        }
+    }
+
+    public void deleteComment(int id) {
+        EntityManager entityManager = getEntityManager();
+        try {
+            entityManager.getTransaction().begin();
+            var comment = entityManager.find(Comment.class, id);
+
+            User user = comment.getAuthor();
+            if (user != null) {
+                user.getMyComments().remove(comment);
+                entityManager.merge(user);
+            }
+
+            entityManager.remove(comment);
+            entityManager.getTransaction().commit();
+        } catch (Exception e) {
+            JavaFxCustomUtils.generateAlert(
+                    javafx.scene.control.Alert.AlertType.ERROR,
+                    "Error",
+                    "Error",
+                    "Error while deleting comment");
         } finally {
             if (entityManager != null) entityManager.close();
         }

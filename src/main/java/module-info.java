@@ -12,5 +12,7 @@ module com.coursework.eshop {
     exports com.coursework.eshop.fxController;
     opens com.coursework.eshop.model to org.hibernate.orm.core;
     exports com.coursework.eshop.model;
+    opens com.coursework.eshop.fxController.tableViews to javafx.fxml;
+    exports com.coursework.eshop.fxController.tableViews;
 
 }
