@@ -5,11 +5,8 @@ import com.coursework.eshop.fxController.tableViews.CustomerTableParameters;
 import com.coursework.eshop.hibernateController.CustomHibernate;
 import com.coursework.eshop.model.*;
 import jakarta.persistence.EntityManagerFactory;
-import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -189,7 +186,7 @@ public class MainShopController implements Initializable {
         customerSurnameColumn.setCellValueFactory(new PropertyValueFactory<>("surname"));
 
         Callback<TableColumn<CustomerTableParameters, Void>, TableCell<CustomerTableParameters, Void>> callback = param -> {
-            final TableCell<CustomerTableParameters, Void> cell = new TextFieldTableCell<>() {
+            return new TextFieldTableCell<>() {
                 private final Button deleteButton = new Button("Delete");
                 {
                     deleteButton.setOnAction(event -> {
@@ -208,7 +205,6 @@ public class MainShopController implements Initializable {
                     }
                 }
             };
-            return cell;
         };
         dummyColumn.setCellFactory(callback);
     }

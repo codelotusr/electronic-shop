@@ -1,8 +1,6 @@
 package com.coursework.eshop.fxController.tableViews;
 
 import javafx.beans.property.SimpleStringProperty;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 
 public class CustomerTableParameters extends UserTableParameters {
     SimpleStringProperty address = new SimpleStringProperty();
