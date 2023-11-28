@@ -78,6 +78,14 @@ public class MainShopController implements Initializable {
     public TextField warehouseAddressField;
     @FXML
     public TextField productManufacturerField;
+    @FXML
+    public TextField commentTitleField;
+    @FXML
+    public TextArea commentBodyField;
+    @FXML
+    public ListView<Comment> commentList;
+    @FXML
+    public Tab commentTab;
 
     private EntityManagerFactory entityManagerFactory;
     private User currentUser;
@@ -100,6 +108,11 @@ public class MainShopController implements Initializable {
     private void loadWarehouseList() {
         warehouseList.getItems().clear();
         warehouseList.getItems().addAll(genericHibernate.readAllRecords(Warehouse.class));
+    }
+
+    private void loadCommentList() {
+        commentList.getItems().clear();
+        commentList.getItems().addAll(genericHibernate.readAllRecords(Comment.class));
     }
 
     private void limitAccess() {
@@ -139,6 +152,8 @@ public class MainShopController implements Initializable {
             warehouseComboBox.getItems().addAll(genericHibernate.readAllRecords(Warehouse.class));
         } else if (warehouseTab.isSelected()) {
             loadWarehouseList();
+        } else if (commentTab.isSelected()) {
+            loadCommentList();
         }
 
     }
@@ -232,10 +247,91 @@ public class MainShopController implements Initializable {
     }
 
     public void updateProduct() {
+        if (productType.getSelectionModel().getSelectedItem() == ProductType.CPU) {
+            Warehouse selectedWarehouse = warehouseComboBox.getSelectionModel().getSelectedItem();
+            CentralProcessingUnit selectedProduct = (CentralProcessingUnit) productListManager.getSelectionModel().getSelectedItem();
+            CentralProcessingUnit product = genericHibernate.readEntityById(CentralProcessingUnit.class, selectedProduct.getId());
+            product.setTitle(productTitleField.getText());
+            product.setDescription(productDescriptionField.getText());
+            product.setManufacturer(productManufacturerField.getText());
+            product.setWarehouse(genericHibernate.readEntityById(Warehouse.class, selectedWarehouse.getId()));
+            product.setSocket(socketField.getText());
+            product.setCoreCount(Integer.parseInt(coreCountField.getText()));
+            product.setCoreFrequency(Integer.parseInt(coreFrequencyField.getText()));
+            product.setTdp(Integer.parseInt(tdpField.getText()));
+            genericHibernate.update(product);
+        } else if (productType.getSelectionModel().getSelectedItem() == ProductType.MOTHERBOARD) {
+            Warehouse selectedWarehouse = warehouseComboBox.getSelectionModel().getSelectedItem();
+            Motherboard selectedProduct = (Motherboard) productListManager.getSelectionModel().getSelectedItem();
+            Motherboard product = genericHibernate.readEntityById(Motherboard.class, selectedProduct.getId());
+            product.setTitle(productTitleField.getText());
+            product.setDescription(productDescriptionField.getText());
+            product.setManufacturer(productManufacturerField.getText());
+            product.setWarehouse(genericHibernate.readEntityById(Warehouse.class, selectedWarehouse.getId()));
+            product.setSocket(socketField.getText());
+            product.setChipset(chipsetField.getText());
+            product.setMemoryType(memoryTypeField.getText());
+            product.setMaxMemorySize(Integer.parseInt(memorySizeField.getText()));
+            product.setMaxMemoryFrequency(Integer.parseInt(memoryFrequencyField.getText()));
+            genericHibernate.update(product);
+        } else if (productType.getSelectionModel().getSelectedItem() == ProductType.GRAPHICS_CARD) {
+            Warehouse selectedWarehouse = warehouseComboBox.getSelectionModel().getSelectedItem();
+            GraphicsCard selectedProduct = (GraphicsCard) productListManager.getSelectionModel().getSelectedItem();
+            GraphicsCard product = genericHibernate.readEntityById(GraphicsCard.class, selectedProduct.getId());
+            product.setTitle(productTitleField.getText());
+            product.setDescription(productDescriptionField.getText());
+            product.setManufacturer(productManufacturerField.getText());
+            product.setWarehouse(genericHibernate.readEntityById(Warehouse.class, selectedWarehouse.getId()));
+            product.setMemoryType(memoryTypeField.getText());
+            product.setMemorySize(Integer.parseInt(memorySizeField.getText()));
+            product.setMemoryFrequency(Integer.parseInt(memoryFrequencyField.getText()));
+            product.setCoreFrequency(Integer.parseInt(coreFrequencyField.getText()));
+            product.setTdp(Integer.parseInt(tdpField.getText()));
+            genericHibernate.update(product);
+        }
         loadProductListManager();
     }
 
+    // TODO: FIX DELETE
     public void deleteProduct() {
+        if (productType.getSelectionModel().getSelectedItem() == ProductType.CPU) {
+            CentralProcessingUnit selectedProduct = (CentralProcessingUnit) productListManager.getSelectionModel().getSelectedItem();
+            genericHibernate.delete(CentralProcessingUnit.class, selectedProduct.getId());
+        } else if (productType.getSelectionModel().getSelectedItem() == ProductType.MOTHERBOARD) {
+            Motherboard selectedProduct = (Motherboard) productListManager.getSelectionModel().getSelectedItem();
+            genericHibernate.delete(Motherboard.class, selectedProduct.getId());
+        } else if (productType.getSelectionModel().getSelectedItem() == ProductType.GRAPHICS_CARD) {
+            GraphicsCard selectedProduct = (GraphicsCard) productListManager.getSelectionModel().getSelectedItem();
+            genericHibernate.delete(GraphicsCard.class, selectedProduct.getId());
+        }
         loadProductListManager();
+    }
+
+    public void addNewComment() {
+        genericHibernate.create(new Comment(commentTitleField.getText(), commentBodyField.getText(), currentUser));
+        loadCommentList();
+    }
+
+    public void updateExistingComment() {
+        Comment selectedComment = commentList.getSelectionModel().getSelectedItem();
+        Comment comment = genericHibernate.readEntityById(Comment.class, selectedComment.getId());
+        comment.setCommentTitle(commentTitleField.getText());
+        comment.setCommentBody(commentBodyField.getText());
+        genericHibernate.update(comment);
+        loadCommentList();
+    }
+
+    // TODO: FIX DELETE
+    public void deleteExistingComment() {
+        Comment selectedComment = commentList.getSelectionModel().getSelectedItem();
+        genericHibernate.delete(Comment.class, selectedComment.getId());
+        loadCommentList();
+    }
+
+    public void selectComment() {
+        Comment selectedComment = commentList.getSelectionModel().getSelectedItem();
+        commentTitleField.setText(selectedComment.getCommentTitle());
+        commentBodyField.setText(selectedComment.getCommentBody());
+
     }
 }

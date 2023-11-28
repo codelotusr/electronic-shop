@@ -89,6 +89,20 @@
                   </AnchorPane>
               </content>
             </Tab>
+            <Tab fx:id="commentTab" onSelectionChanged="#loadTabValues" text="Comments">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <TextField fx:id="commentTitleField" layoutX="29.0" layoutY="22.0" prefHeight="25.0" prefWidth="200.0" promptText="Title" />
+                        <TextArea fx:id="commentBodyField" layoutX="29.0" layoutY="70.0" prefHeight="200.0" prefWidth="200.0" promptText="Comment" />
+                        <ListView fx:id="commentList" layoutX="252.0" layoutY="22.0" onMouseClicked="#selectComment" prefHeight="247.0" prefWidth="321.0" />
+                        <Button layoutX="43.0" layoutY="306.0" mnemonicParsing="false" onAction="#addNewComment" prefHeight="25.0" prefWidth="74.0" text="Add" />
+                        <Button layoutX="241.0" layoutY="306.0" mnemonicParsing="false" onAction="#updateExistingComment" prefHeight="25.0" prefWidth="69.0" text="Update" />
+                        <Button layoutX="472.0" layoutY="306.0" mnemonicParsing="false" onAction="#deleteExistingComment" prefHeight="25.0" prefWidth="64.0" text="Delete" />
+                     </children>
+                  </AnchorPane>
+              </content>
+            </Tab>
             <Tab fx:id="otherTab" text="Other">
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">

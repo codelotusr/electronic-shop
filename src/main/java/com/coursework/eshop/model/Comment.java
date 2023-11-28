@@ -29,4 +29,9 @@ public class Comment {
         this.dateCreated = LocalDate.now();
         this.author = author;
     }
+
+    @Override
+    public String toString() {
+        return author + " " + commentTitle + " " + dateCreated;
+    }
 }
