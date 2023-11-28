@@ -191,7 +191,7 @@ public class MainShopController implements Initializable {
                 {
                     deleteButton.setOnAction(event -> {
                         CustomerTableParameters row = getTableView().getItems().get(getIndex());
-                        customHibernate.delete(Customer.class, row.getId());
+                        customHibernate.deleteCustomer(row.getId());
                         customerTable.getItems().remove(row);
                     });
                 }
@@ -302,7 +302,7 @@ public class MainShopController implements Initializable {
 
     public void removeExistingWarehouse() {
         Warehouse selectedWarehouse = warehouseList.getSelectionModel().getSelectedItem();
-        customHibernate.delete(Warehouse.class, selectedWarehouse.getId());
+        customHibernate.deleteWarehouse(selectedWarehouse.getId());
         loadWarehouseList();
     }
 

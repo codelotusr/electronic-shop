@@ -90,4 +90,61 @@ public class CustomHibernate extends GenericHibernate {
             if (entityManager != null) entityManager.close();
         }
     }
+
+    public void deleteWarehouse(int id) {
+        EntityManager entityManager = getEntityManager();
+        try {
+            entityManager.getTransaction().begin();
+            var warehouse = entityManager.find(Warehouse.class, id);
+
+            entityManager.remove(warehouse);
+            entityManager.getTransaction().commit();
+        } catch (Exception e) {
+            JavaFxCustomUtils.generateAlert(
+                    javafx.scene.control.Alert.AlertType.ERROR,
+                    "Error",
+                    "Error",
+                    "Error while deleting warehouse");
+        } finally {
+            if (entityManager != null) entityManager.close();
+        }
+    }
+
+    public void deleteManager(int id) {
+        EntityManager entityManager = getEntityManager();
+        try {
+            entityManager.getTransaction().begin();
+            var manager = entityManager.find(User.class, id);
+
+            entityManager.remove(manager);
+            entityManager.getTransaction().commit();
+        } catch (Exception e) {
+            JavaFxCustomUtils.generateAlert(
+                    javafx.scene.control.Alert.AlertType.ERROR,
+                    "Error",
+                    "Error",
+                    "Error while deleting manager");
+        } finally {
+            if (entityManager != null) entityManager.close();
+        }
+    }
+
+    public void deleteCustomer(int id) {
+        EntityManager entityManager = getEntityManager();
+        try {
+            entityManager.getTransaction().begin();
+            var customer = entityManager.find(User.class, id);
+
+            entityManager.remove(customer);
+            entityManager.getTransaction().commit();
+        } catch (Exception e) {
+            JavaFxCustomUtils.generateAlert(
+                    javafx.scene.control.Alert.AlertType.ERROR,
+                    "Error",
+                    "Error",
+                    "Error while deleting customer");
+        } finally {
+            if (entityManager != null) entityManager.close();
+        }
+    }
 }
