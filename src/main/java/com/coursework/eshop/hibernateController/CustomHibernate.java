@@ -147,4 +147,23 @@ public class CustomHibernate extends GenericHibernate {
             if (entityManager != null) entityManager.close();
         }
     }
+
+    public void deleteCart(int id) {
+        EntityManager entityManager = getEntityManager();
+        try {
+            entityManager.getTransaction().begin();
+            var cart = entityManager.find(User.class, id);
+
+            entityManager.remove(cart);
+            entityManager.getTransaction().commit();
+        } catch (Exception e) {
+            JavaFxCustomUtils.generateAlert(
+                    javafx.scene.control.Alert.AlertType.ERROR,
+                    "Error",
+                    "Error",
+                    "Error while deleting cart");
+        } finally {
+            if (entityManager != null) entityManager.close();
+        }
+    }
 }

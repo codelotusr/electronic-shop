@@ -93,12 +93,14 @@ public class RegistrationController {
         }
     }
 
-    public void createUser() {
+    public void createUser() throws IOException {
         customHibernate = new CustomHibernate(entityManagerFactory);
-        if (customerCheckBox.isSelected()) {
+        if (customerCheckBox.isSelected() && validateInputCustomer()) {
             customHibernate.create(new Customer(loginField.getText(), passwordField.getText(), birthDateField.getValue(), nameField.getText(), surnameField.getText(), addressField.getText(), cardNoField.getText()));
-        } else if (managerCheckBox.isSelected()) {
+            returnToLogin();
+        } else if (managerCheckBox.isSelected() && validateInputManager()) {
             customHibernate.create(new Manager(loginField.getText(), passwordField.getText(), birthDateField.getValue(), nameField.getText(), surnameField.getText(), employeeIdField.getText(), medicalCertificateField.getText(), employmentDateField.getValue(), isAdministratorCheck.isSelected()));
+            returnToLogin();
         } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
@@ -118,5 +120,339 @@ public class RegistrationController {
         stage.setTitle("Login");
         stage.setScene(scene);
         stage.show();
+    }
+
+    private boolean validateInputCustomer() {
+        boolean isValid = true;
+        if (loginField.getText().isEmpty()) {
+            JavaFxCustomUtils.generateAlert(
+                    Alert.AlertType.ERROR,
+                    "Error",
+                    "Error",
+                    "Username field is empty"
+            );
+            isValid = false;
+        }
+        if (passwordField.getText().isEmpty()) {
+            isValid = false;
+            JavaFxCustomUtils.generateAlert(
+                    Alert.AlertType.ERROR,
+                    "Error",
+                    "Error",
+                    "Password field is empty"
+            );
+        }
+        if (repeatPasswordField.getText().isEmpty()) {
+            isValid = false;
+            JavaFxCustomUtils.generateAlert(
+                    Alert.AlertType.ERROR,
+                    "Error",
+                    "Error",
+                    "Repeat password field is empty"
+            );
+        }
+        if (nameField.getText().isEmpty()) {
+            isValid = false;
+            JavaFxCustomUtils.generateAlert(
+                    Alert.AlertType.ERROR,
+                    "Error",
+                    "Error",
+                    "Name field is empty"
+            );
+        }
+        if (surnameField.getText().isEmpty()) {
+            isValid = false;
+            JavaFxCustomUtils.generateAlert(
+                    Alert.AlertType.ERROR,
+                    "Error",
+                    "Error",
+                    "Surname field is empty"
+            );
+        }
+        if (birthDateField.getValue() == null) {
+            isValid = false;
+            JavaFxCustomUtils.generateAlert(
+                    Alert.AlertType.ERROR,
+                    "Error",
+                    "Error",
+                    "Birth date field is empty"
+            );
+        }
+        if (addressField.getText().isEmpty()) {
+            isValid = false;
+            JavaFxCustomUtils.generateAlert(
+                    Alert.AlertType.ERROR,
+                    "Error",
+                    "Error",
+                    "Address field is empty"
+            );
+        }
+        if (cardNoField.getText().isEmpty()) {
+            isValid = false;
+            JavaFxCustomUtils.generateAlert(
+                    Alert.AlertType.ERROR,
+                    "Error",
+                    "Error",
+                    "Card number field is empty"
+            );
+        }
+        if (!passwordField.getText().equals(repeatPasswordField.getText())) {
+            isValid = false;
+            JavaFxCustomUtils.generateAlert(
+                    Alert.AlertType.ERROR,
+                    "Error",
+                    "Error",
+                    "Passwords do not match"
+            );
+        }
+        if (birthDateField.getValue().isAfter(java.time.LocalDate.now())) {
+            isValid = false;
+            JavaFxCustomUtils.generateAlert(
+                    Alert.AlertType.ERROR,
+                    "Error",
+                    "Error",
+                    "Birth date is in the future"
+            );
+        }
+        if (cardNoField.getText().length() != 16) {
+            isValid = false;
+            JavaFxCustomUtils.generateAlert(
+                    Alert.AlertType.ERROR,
+                    "Error",
+                    "Error",
+                    "Card number must be 16 digits long"
+            );
+        }
+        if (!cardNoField.getText().matches("[0-9]+")) {
+            isValid = false;
+            JavaFxCustomUtils.generateAlert(
+                    Alert.AlertType.ERROR,
+                    "Error",
+                    "Error",
+                    "Card number must contain only digits"
+            );
+        }
+        if (!addressField.getText().matches("[a-zA-Z0-9]+")) {
+            isValid = false;
+            JavaFxCustomUtils.generateAlert(
+                    Alert.AlertType.ERROR,
+                    "Error",
+                    "Error",
+                    "Address must contain only letters and digits"
+            );
+        }
+        if (!nameField.getText().matches("[a-zA-Z]+")) {
+            isValid = false;
+            JavaFxCustomUtils.generateAlert(
+                    Alert.AlertType.ERROR,
+                    "Error",
+                    "Error",
+                    "Name must contain only letters"
+            );
+        }
+        if (!surnameField.getText().matches("[a-zA-Z]+")) {
+            isValid = false;
+            JavaFxCustomUtils.generateAlert(
+                    Alert.AlertType.ERROR,
+                    "Error",
+                    "Error",
+                    "Surname must contain only letters"
+            );
+        }
+        if (!loginField.getText().matches("[a-zA-Z0-9]+")) {
+            isValid = false;
+            JavaFxCustomUtils.generateAlert(
+                    Alert.AlertType.ERROR,
+                    "Error",
+                    "Error",
+                    "Username must contain only letters and digits"
+            );
+        }
+        if (!passwordField.getText().matches("[a-zA-Z0-9]+")) {
+            isValid = false;
+            JavaFxCustomUtils.generateAlert(
+                    Alert.AlertType.ERROR,
+                    "Error",
+                    "Error",
+                    "Password must contain only letters and digits"
+            );
+        }
+        return isValid;
+    }
+
+    public boolean validateInputManager() {
+        boolean isValid = true;
+        if (loginField.getText().isEmpty()) {
+            JavaFxCustomUtils.generateAlert(
+                    Alert.AlertType.ERROR,
+                    "Error",
+                    "Error",
+                    "Username field is empty"
+            );
+            isValid = false;
+        }
+        if (passwordField.getText().isEmpty()) {
+            isValid = false;
+            JavaFxCustomUtils.generateAlert(
+                    Alert.AlertType.ERROR,
+                    "Error",
+                    "Error",
+                    "Password field is empty"
+            );
+        }
+        if (repeatPasswordField.getText().isEmpty()) {
+            isValid = false;
+            JavaFxCustomUtils.generateAlert(
+                    Alert.AlertType.ERROR,
+                    "Error",
+                    "Error",
+                    "Repeat password field is empty"
+            );
+        }
+        if (nameField.getText().isEmpty()) {
+            isValid = false;
+            JavaFxCustomUtils.generateAlert(
+                    Alert.AlertType.ERROR,
+                    "Error",
+                    "Error",
+                    "Name field is empty"
+            );
+        }
+        if (surnameField.getText().isEmpty()) {
+            isValid = false;
+            JavaFxCustomUtils.generateAlert(
+                    Alert.AlertType.ERROR,
+                    "Error",
+                    "Error",
+                    "Surname field is empty"
+            );
+        }
+        if (birthDateField.getValue() == null) {
+            isValid = false;
+            JavaFxCustomUtils.generateAlert(
+                    Alert.AlertType.ERROR,
+                    "Error",
+                    "Error",
+                    "Birth date field is empty"
+            );
+        }
+        if (employeeIdField.getText().isEmpty()) {
+            isValid = false;
+            JavaFxCustomUtils.generateAlert(
+                    Alert.AlertType.ERROR,
+                    "Error",
+                    "Error",
+                    "Employee ID field is empty"
+            );
+        }
+        if (medicalCertificateField.getText().isEmpty()) {
+            isValid = false;
+            JavaFxCustomUtils.generateAlert(
+                    Alert.AlertType.ERROR,
+                    "Error",
+                    "Error",
+                    "Medical certificate field is empty"
+            );
+        }
+        if (employmentDateField.getValue() == null) {
+            isValid = false;
+            JavaFxCustomUtils.generateAlert(
+                    Alert.AlertType.ERROR,
+                    "Error",
+                    "Error",
+                    "Employment date field is empty"
+            );
+        }
+        if (!passwordField.getText().equals(repeatPasswordField.getText())) {
+            isValid = false;
+            JavaFxCustomUtils.generateAlert(
+                    Alert.AlertType.ERROR,
+                    "Error",
+                    "Error",
+                    "Passwords do not match"
+            );
+        }
+        if (birthDateField.getValue().isAfter(java.time.LocalDate.now())) {
+            isValid = false;
+            JavaFxCustomUtils.generateAlert(
+                    Alert.AlertType.ERROR,
+                    "Error",
+                    "Error",
+                    "Birth date is in the future"
+            );
+        }
+        if (employmentDateField.getValue().isAfter(java.time.LocalDate.now())) {
+            isValid = false;
+            JavaFxCustomUtils.generateAlert(
+                    Alert.AlertType.ERROR,
+                    "Error",
+                    "Error",
+                    "Employment date is in the future"
+            );
+        }
+        if (employeeIdField.getText().length() != 6) {
+            isValid = false;
+            JavaFxCustomUtils.generateAlert(
+                    Alert.AlertType.ERROR,
+                    "Error",
+                    "Error",
+                    "Employee ID must be 6 digits long"
+            );
+        }
+        if (!employeeIdField.getText().matches("[0-9]+")) {
+            isValid = false;
+            JavaFxCustomUtils.generateAlert(
+                    Alert.AlertType.ERROR,
+                    "Error",
+                    "Error",
+                    "Employee ID must contain only digits"
+            );
+        }
+        if (!medicalCertificateField.getText().matches("[0-9]+")) {
+            isValid = false;
+            JavaFxCustomUtils.generateAlert(
+                    Alert.AlertType.ERROR,
+                    "Error",
+                    "Error",
+                    "Medical certificate must contain only digits"
+            );
+        }
+        if (!nameField.getText().matches("[a-zA-Z]+")) {
+            isValid = false;
+            JavaFxCustomUtils.generateAlert(
+                    Alert.AlertType.ERROR,
+                    "Error",
+                    "Error",
+                    "Name must contain only letters"
+            );
+        }
+        if (!surnameField.getText().matches("[a-zA-Z]+")) {
+            isValid = false;
+            JavaFxCustomUtils.generateAlert(
+                    Alert.AlertType.ERROR,
+                    "Error",
+                    "Error",
+                    "Surname must contain only letters"
+            );
+        }
+        if (!loginField.getText().matches("[a-zA-Z0-9]+")) {
+            isValid = false;
+            JavaFxCustomUtils.generateAlert(
+                    Alert.AlertType.ERROR,
+                    "Error",
+                    "Error",
+                    "Username must contain only letters and digits"
+            );
+        }
+        if (!passwordField.getText().matches("[a-zA-Z0-9]+")) {
+            isValid = false;
+            JavaFxCustomUtils.generateAlert(
+                    Alert.AlertType.ERROR,
+                    "Error",
+                    "Error",
+                    "Password must contain only letters and digits"
+            );
+        }
+        return isValid;
     }
 }

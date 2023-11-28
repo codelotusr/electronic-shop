@@ -8,6 +8,7 @@ import com.coursework.eshop.model.*;
 import jakarta.persistence.EntityManagerFactory;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -16,6 +17,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 
@@ -29,7 +32,7 @@ public class MainShopController implements Initializable {
     @FXML
     public ListView<Product> productList;
     @FXML
-    public ListView<Cart> currentOrder;
+    public ListView<Cart> currentCartList;
     @FXML
     public Tab productTab;
     @FXML
@@ -125,8 +128,10 @@ public class MainShopController implements Initializable {
     public TableColumn<ManagerTableParameters, Boolean> managerIsAdministratorColumn;
     @FXML
     public TableColumn<ManagerTableParameters, Void> managerDummyColumn;
-
-
+    @FXML
+    public AnchorPane mainAnchorPane;
+    @FXML
+    private ColorPicker mainColorPicker;
     private final ObservableList<CustomerTableParameters> customerTableParametersObservableList = FXCollections.observableArrayList();
     private final ObservableList<ManagerTableParameters> managerTableParametersObservableList = FXCollections.observableArrayList();
     private EntityManagerFactory entityManagerFactory;
@@ -157,16 +162,23 @@ public class MainShopController implements Initializable {
         commentList.getItems().addAll(customHibernate.readAllRecords(Comment.class));
     }
 
+    private void loadCartList() {
+        currentCartList.getItems().clear();
+        currentCartList.getItems().addAll(customHibernate.readAllRecords(Cart.class));
+    }
+
     private void limitAccess() {
         if (currentUser.getClass() == Manager.class) {
             Manager manager = (Manager) currentUser;
             if (!manager.isAdministrator()) {
-                managerTable.setDisable(true);
+                managerTable.setVisible(true);
             }
         } else if (currentUser.getClass() == Customer.class) {
             Customer customer = (Customer) currentUser;
             tabPane.getTabs().remove(warehouseTab);
             tabPane.getTabs().remove(usersTab);
+            tabPane.getTabs().remove(ordersTab);
+            tabPane.getTabs().remove(productTab);
         } else {
             JavaFxCustomUtils.generateAlert(
                     Alert.AlertType.ERROR,
@@ -176,10 +188,13 @@ public class MainShopController implements Initializable {
         }
     }
 
-    public void leaveComment() {
-    }
-
     public void addToCart() {
+        Product selectedProduct = productList.getSelectionModel().getSelectedItem();
+        Cart cart = new Cart();
+        cart.setCustomer((Customer) currentUser);
+        cart.getItemsInCart().add(selectedProduct);
+        customHibernate.create(cart);
+        loadCartList();
     }
 
     @Override
@@ -302,6 +317,7 @@ public class MainShopController implements Initializable {
 
     public void loadTabValues() {
         if (productTab.isSelected()) {
+            disableAllOnTabSelect();
             loadProductListManager();
             warehouseComboBox.getItems().clear();
             warehouseComboBox.getItems().addAll(customHibernate.readAllRecords(Warehouse.class));
@@ -311,8 +327,16 @@ public class MainShopController implements Initializable {
             loadCommentList();
         } else if (usersTab.isSelected()) {
             loadUserTables();
+        } else if (primaryTab.isSelected()) {
+            loadCartList();
+            loadProductList();
         }
 
+    }
+    private void loadProductList() {
+        productList.getItems().clear();
+        List<Product> allProducts = customHibernate.readAllRecords(Product.class);
+        productList.getItems().addAll(allProducts);
     }
 
     private void loadUserTables() {
@@ -378,6 +402,17 @@ public class MainShopController implements Initializable {
             chipsetField.setDisable(true);
             coreCountField.setDisable(true);
         }
+    }
+
+    public void disableAllOnTabSelect() {
+        socketField.setDisable(true);
+        chipsetField.setDisable(true);
+        coreCountField.setDisable(true);
+        coreFrequencyField.setDisable(true);
+        tdpField.setDisable(true);
+        memoryTypeField.setDisable(true);
+        memorySizeField.setDisable(true);
+        memoryFrequencyField.setDisable(true);
     }
 
     public void logout() throws IOException {
@@ -518,5 +553,27 @@ public class MainShopController implements Initializable {
 
     public void exitShop() {
         System.exit(0);
+    }
+
+    public void changeMainColor() {
+        String hexColor = toHexString(mainColorPicker.getValue());
+        mainAnchorPane.setStyle("-fx-background-color: #" + hexColor);
+    }
+
+
+    private String toHexString(Color color) {
+        return String.format("%02X%02X%02X",
+                (int) (color.getRed() * 255),
+                (int) (color.getGreen() * 255),
+                (int) (color.getBlue() * 255));
+    }
+
+    public void removeFromCart() {
+        Cart selectedCart = currentCartList.getSelectionModel().getSelectedItem();
+        customHibernate.deleteCart(selectedCart.getId());
+        loadCartList();
+    }
+
+    public void placeOrder() {
     }
 }
