@@ -12,6 +12,6 @@
       <PasswordField fx:id="passwordField" layoutX="59.0" layoutY="86.0" prefHeight="25.0" prefWidth="142.0" promptText="Password" AnchorPane.bottomAnchor="110.0" AnchorPane.leftAnchor="59.0" AnchorPane.rightAnchor="59.0" AnchorPane.topAnchor="86.0" />
       <Button layoutX="28.0" layoutY="146.0" mnemonicParsing="false" onAction="#validateAndConnect" prefHeight="25.0" prefWidth="83.0" text="Login" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="28.0" AnchorPane.rightAnchor="126.0" AnchorPane.topAnchor="146.0" />
       <Button layoutX="128.0" layoutY="146.0" mnemonicParsing="false" onAction="#registerNewUser" prefHeight="25.0" prefWidth="83.0" text="Register" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="128.0" AnchorPane.rightAnchor="26.0" AnchorPane.topAnchor="146.0" />
-      <Text layoutX="43.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Please enter your credentials" />
+      <Text layoutX="43.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Please enter your credentials" AnchorPane.bottomAnchor="191.0390625" AnchorPane.leftAnchor="43.0" AnchorPane.rightAnchor="42.18359375" AnchorPane.topAnchor="14.05078125" />
    </children>
 </AnchorPane>

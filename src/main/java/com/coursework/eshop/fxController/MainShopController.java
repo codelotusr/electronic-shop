@@ -134,6 +134,8 @@ public class MainShopController implements Initializable {
     @FXML
     public ListView<Order> ordersList;
     @FXML
+    public Button adminRegister;
+    @FXML
     private ColorPicker mainColorPicker;
     private final ObservableList<CustomerTableParameters> customerTableParametersObservableList = FXCollections.observableArrayList();
     private final ObservableList<ManagerTableParameters> managerTableParametersObservableList = FXCollections.observableArrayList();
@@ -175,6 +177,7 @@ public class MainShopController implements Initializable {
             Manager manager = (Manager) currentUser;
             if (!manager.isAdministrator()) {
                 managerTable.setVisible(false);
+                adminRegister.setDisable(true);
             }
             tabPane.getTabs().remove(primaryTab);
         } else if (currentUser.getClass() == Customer.class) {
@@ -594,5 +597,17 @@ public class MainShopController implements Initializable {
     }
 
     public void removeOrder() {
+    }
+
+    public void adminRegisterNewUser() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(StartGui.class.getResource("registration.fxml"));
+        Parent parent = fxmlLoader.load();
+        RegistrationController registrationController = fxmlLoader.getController();
+        registrationController.setData(entityManagerFactory, false);
+        Scene scene = new Scene(parent);
+        Stage stage = (Stage) socketField.getScene().getWindow();
+        stage.setTitle("Registration");
+        stage.setScene(scene);
+        stage.show();
     }
 }

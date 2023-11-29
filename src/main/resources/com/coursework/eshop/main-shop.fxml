@@ -20,9 +20,9 @@
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <ListView fx:id="productList" layoutX="14.0" layoutY="14.0" prefHeight="344.0" prefWidth="202.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="375.0" AnchorPane.topAnchor="14.0" />
-                        <Button layoutX="229.0" layoutY="205.0" mnemonicParsing="false" onAction="#addToCart" text="Add to cart" />
-                        <ListView fx:id="currentCartList" layoutX="229.0" layoutY="14.0" prefHeight="179.0" prefWidth="345.0" />
+                        <ListView fx:id="productList" layoutX="14.0" layoutY="10.0" prefHeight="344.0" prefWidth="202.0" AnchorPane.bottomAnchor="9.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="375.0" AnchorPane.topAnchor="10.0" />
+                        <Button layoutX="229.0" layoutY="205.0" mnemonicParsing="false" onAction="#addToCart" text="Add to cart" AnchorPane.bottomAnchor="133.0" AnchorPane.leftAnchor="229.0" AnchorPane.rightAnchor="286.0" AnchorPane.topAnchor="205.0" />
+                        <ListView fx:id="currentCartList" layoutX="229.0" layoutY="14.0" prefHeight="179.0" prefWidth="345.0" AnchorPane.bottomAnchor="170.0" AnchorPane.leftAnchor="229.0" AnchorPane.rightAnchor="17.0" AnchorPane.topAnchor="14.0" />
                         <Button layoutX="323.0" layoutY="205.0" mnemonicParsing="false" onAction="#removeFromCart" prefHeight="25.0" prefWidth="117.0" text="Remove from cart" />
                         <Button layoutX="452.0" layoutY="205.0" mnemonicParsing="false" onAction="#placeOrder" prefHeight="25.0" prefWidth="107.0" text="Place order" />
                      </children></AnchorPane>
@@ -32,7 +32,7 @@
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <TableView fx:id="customerTable" layoutX="14.0" layoutY="14.0" prefHeight="179.0" prefWidth="569.0">
+                        <TableView fx:id="customerTable" layoutX="14.0" layoutY="14.0" prefHeight="152.0" prefWidth="569.0">
                           <columns>
                             <TableColumn fx:id="customerIdColumn" prefWidth="37.0" text="ID" />
                             <TableColumn fx:id="customerUsernameColumn" prefWidth="95.0" text="Username" />
@@ -44,7 +44,7 @@
                               <TableColumn fx:id="dummyColumn" prefWidth="82.0" text="Action" />
                           </columns>
                         </TableView>
-                        <TableView fx:id="managerTable" layoutX="14.0" layoutY="196.0" prefHeight="162.0" prefWidth="569.0">
+                        <TableView fx:id="managerTable" layoutX="14.0" layoutY="166.0" prefHeight="151.0" prefWidth="569.0">
                           <columns>
                             <TableColumn fx:id="managerIdColumn" prefWidth="36.0" text="ID" />
                             <TableColumn fx:id="managerUsernameColumn" prefWidth="68.0" text="Username" />
@@ -57,6 +57,7 @@
                               <TableColumn fx:id="managerDummyColumn" prefWidth="81.0" text="Action" />
                           </columns>
                         </TableView>
+                        <Button fx:id="adminRegister" layoutX="241.0" layoutY="324.0" mnemonicParsing="false" onAction="#adminRegisterNewUser" text="Register new user" />
                      </children></AnchorPane>
             </content>
           </Tab>
