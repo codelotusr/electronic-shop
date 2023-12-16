@@ -63,19 +63,22 @@ public class CustomHibernate extends GenericHibernate {
     }
 
     public void deleteComment(int id) {
-        EntityManager entityManager = getEntityManager();
+        EntityManager em = getEntityManager();
         try {
-            entityManager.getTransaction().begin();
-            var comment = entityManager.find(Comment.class, id);
+            em.getTransaction().begin();
+            var comment = em.find(Comment.class, id);
 
-            User user = comment.getAuthor();
-            if (user != null) {
-                user.getMyComments().remove(comment);
-                entityManager.merge(user);
+            if (comment.getClass() == Review.class) {
+                Review review = (Review) comment;
+                Product product = em.find(Product.class, review.getProduct().getId());
+                product.getReviews().remove(review);
+                em.merge(product);
+            } else {
+                comment.getReplies().clear();
+                em.remove(comment);
+
             }
-
-            entityManager.remove(comment);
-            entityManager.getTransaction().commit();
+            em.getTransaction().commit();
         } catch (Exception e) {
             JavaFxCustomUtils.generateAlert(
                     javafx.scene.control.Alert.AlertType.ERROR,
@@ -83,7 +86,7 @@ public class CustomHibernate extends GenericHibernate {
                     "Error",
                     "Error while deleting comment");
         } finally {
-            if (entityManager != null) entityManager.close();
+            if (em != null) em.close();
         }
     }
 
@@ -143,102 +146,55 @@ public class CustomHibernate extends GenericHibernate {
             if (entityManager != null) entityManager.close();
         }
     }
-    public Cart findCartByCustomer(Customer customer) {
-        EntityManager entityManager = getEntityManager();
+
+    public List<Product> getAvailableProducts() {
+        EntityManager em = getEntityManager();
         try {
-            CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-            CriteriaQuery<Cart> query = cb.createQuery(Cart.class);
-            Root<Cart> root = query.from(Cart.class);
+            CriteriaBuilder cb = em.getCriteriaBuilder();
+            CriteriaQuery<Product> query = cb.createQuery(Product.class);
+            Root<Product> root = query.from(Product.class);
+            query.select(root).where(cb.isNull(root.get("cart")));
+            Query q;
 
-            query.select(root).where(cb.equal(root.get("customer"), customer));
-
-            TypedQuery<Cart> typedQuery = entityManager.createQuery(query);
-            List<Cart> carts = typedQuery.getResultList();
-
-            if (!carts.isEmpty()) {
-                return carts.get(0);
-            }
-            return null;
-        } catch (Exception e) {
+            q = em.createQuery(query);
+            return q.getResultList();
+        } catch (NoResultException e) {
             JavaFxCustomUtils.generateAlert(
                     javafx.scene.control.Alert.AlertType.ERROR,
                     "Error",
                     "Error",
-                    "Error while finding cart by customer");
+                    "Error while getting available products");
             return null;
         } finally {
-            if (entityManager != null) entityManager.close();
+            if (em != null) em.close();
         }
     }
 
-    public void deleteCart(int id) {
-        EntityManager entityManager = getEntityManager();
+    public void addToCart(int userId, List<Product> productList) {
+        EntityManager em = getEntityManager();
         try {
-            entityManager.getTransaction().begin();
-            Cart cart = entityManager.find(Cart.class, id);
+            em.getTransaction().begin();
 
-            if (cart != null) {
-                Customer customer = cart.getCustomer();
-                if (customer != null) {
-                    customer.getMyPurchases().remove(cart);
-                    entityManager.merge(customer);
-                }
-                entityManager.remove(cart);
-                entityManager.getTransaction().commit();
-            } else {
-                JavaFxCustomUtils.generateAlert(
-                        javafx.scene.control.Alert.AlertType.INFORMATION,
-                        "Information",
-                        "No Cart Found",
-                        "No cart found with the provided ID.");
+            User user = readEntityById(User.class, userId);
+            Cart cart = new Cart(user);
+            for (Product p : productList) {
+                Product product = readEntityById(Product.class, p.getId());
+                product.setCart(cart);
+                cart.getItemsInCart().add(product);
             }
-        } catch (Exception e) {
+            user.getMyCarts().add(cart);
+            em.merge(user);
+
+            em.getTransaction().commit();
+        } catch (NoResultException e) {
             JavaFxCustomUtils.generateAlert(
                     javafx.scene.control.Alert.AlertType.ERROR,
                     "Error",
                     "Error",
-                    "Error while deleting cart");
+                    "Error while adding to cart");
         } finally {
-            if (entityManager != null) entityManager.close();
+            if (em != null) em.close();
         }
     }
-
-    public void removeFromCart(int cartId, int productId) {
-        EntityManager entityManager = getEntityManager();
-        try {
-            entityManager.getTransaction().begin();
-
-            Cart cart = entityManager.find(Cart.class, cartId);
-            Product product = entityManager.find(Product.class, productId);
-
-            if (cart != null && product != null) {
-                cart.getItemsInCart().remove(product);
-                product.setCart(null);
-
-                entityManager.merge(cart);
-                entityManager.merge(product);
-
-                entityManager.getTransaction().commit();
-            } else {
-                JavaFxCustomUtils.generateAlert(
-                        javafx.scene.control.Alert.AlertType.INFORMATION,
-                        "Information",
-                        "No Cart or Product Found",
-                        "No cart or product found with the provided IDs.");
-            }
-        } catch (Exception e) {
-            JavaFxCustomUtils.generateAlert(
-                    javafx.scene.control.Alert.AlertType.ERROR,
-                    "Error",
-                    "Error",
-                    "Error while removing product from cart");
-        } finally {
-            if (entityManager != null) entityManager.close();
-        }
-    }
-
-
-
-
 
 }

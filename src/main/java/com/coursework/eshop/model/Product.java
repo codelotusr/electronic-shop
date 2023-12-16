@@ -5,9 +5,12 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 
 @NoArgsConstructor
@@ -24,13 +27,15 @@ public class Product implements Serializable {
     String manufacturer;
 
     @ManyToOne
-    @JoinColumn(name = "cart_id")
-    Cart cart;
+    Warehouse warehouse;
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    @LazyCollection(LazyCollectionOption.FALSE)
+    List<Review> reviews;
 
     @ManyToOne
-    Warehouse warehouse;
+    Cart cart;
 
-    public Product(String name, String description) {
+    public Product(String title, String description) {
         this.title = title;
         this.description = description;
     }

@@ -5,6 +5,9 @@ module com.coursework.eshop {
     requires java.sql;
     requires org.hibernate.orm.core;
     requires jakarta.persistence;
+    requires spring.web;
+    requires spring.core;
+    requires spring.context;
 
     opens com.coursework.eshop to javafx.fxml;
     exports com.coursework.eshop;

@@ -523,29 +523,9 @@ public class MainShopController implements Initializable {
     }
 
     public void addNewComment() {
-        customHibernate.create(new Comment(commentTitleField.getText(), commentBodyField.getText(), currentUser));
+        customHibernate.create(new Comment(commentTitleField.getText(), commentBodyField.getText()));
         loadCommentList();
     }
-
-    public void addToCart() {
-        Product selectedProduct = productList.getSelectionModel().getSelectedItem();
-        Cart cart;
-
-        cart = customHibernate.findCartByCustomer((Customer) currentUser);
-
-        if (cart == null) {
-            cart = new Cart();
-            cart.setCustomer((Customer) currentUser);
-            cart.setItemsInCart(new ArrayList<>());
-        }
-
-        selectedProduct.setCart(cart);
-        cart.getItemsInCart().add(selectedProduct);
-
-        customHibernate.update(cart);
-        loadCartList();
-    }
-
 
     public void updateExistingComment() {
         Comment selectedComment = commentList.getSelectionModel().getSelectedItem();
@@ -584,16 +564,6 @@ public class MainShopController implements Initializable {
                 (int) (color.getRed() * 255),
                 (int) (color.getGreen() * 255),
                 (int) (color.getBlue() * 255));
-    }
-
-    public void removeFromCart() {
-        Cart selectedCart = currentCartList.getSelectionModel().getSelectedItem();
-        Product selectedProduct = productList.getSelectionModel().getSelectedItem();
-        customHibernate.removeFromCart(selectedCart.getId(), selectedProduct.getId());
-        loadCartList();
-    }
-
-    public void placeOrder() {
     }
 
     public void removeOrder() {

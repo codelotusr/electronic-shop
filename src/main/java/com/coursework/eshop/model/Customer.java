@@ -22,9 +22,7 @@ import java.util.List;
 public class Customer extends User {
     private String address;
     private String cardNo;
-    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
-    @LazyCollection(LazyCollectionOption.FALSE)
-    private List<Cart> myPurchases;
+
 
     public Customer(String login, String password, LocalDate birthDate, String name, String surname, String address, String cardNo) {
         super(login, password, birthDate, name, surname);
@@ -44,7 +42,4 @@ public class Customer extends User {
                 '}';
     }
 
-    public List<Cart> getCustomerCart() {
-        return myPurchases;
-    }
 }
