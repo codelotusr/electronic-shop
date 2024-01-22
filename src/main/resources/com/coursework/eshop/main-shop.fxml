@@ -89,6 +89,7 @@
                                 <TableColumn fx:id="cartValueColumn" prefWidth="83.20001220703125" text="Cart Value" />
                                 <TableColumn fx:id="userIdColumn" minWidth="0.0" prefWidth="63.20001220703125" text="User ID" />
                                 <TableColumn fx:id="completedColumn" prefWidth="82.4000244140625" text="Completed" />
+                           <TableColumn fx:id="cartDummyColumn" prefWidth="75.0" text="Action" />
 
                             </columns>
                         </TableView>

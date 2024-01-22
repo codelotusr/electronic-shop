@@ -174,4 +174,49 @@ public class CustomHibernate extends GenericHibernate {
         }
         return result;
     }
+
+    public void deleteCart(int id) {
+        EntityManager entityManager = getEntityManager();
+        try {
+            entityManager.getTransaction().begin();
+            Cart cart = entityManager.find(Cart.class, id);
+
+            if (cart != null) {
+                User user = cart.getOwner();
+                if (user != null) {
+                    user.getMyCarts().remove(cart);
+                    entityManager.merge(user);
+                }
+
+                for (Product product : cart.getItemsInCart()) {
+                    product.setCart(null);
+                    entityManager.merge(product);
+                }
+
+                entityManager.remove(cart);
+                entityManager.getTransaction().commit();
+            } else {
+                JavaFxCustomUtils.generateAlert(
+                        javafx.scene.control.Alert.AlertType.ERROR,
+                        "Error",
+                        "Error",
+                        "Cart not found");
+            }
+        } catch (Exception e) {
+            if (entityManager.getTransaction().isActive()) {
+                entityManager.getTransaction().rollback();
+            }
+            JavaFxCustomUtils.generateAlert(
+                    javafx.scene.control.Alert.AlertType.ERROR,
+                    "Error",
+                    "Error",
+                    "Error while deleting cart");
+            e.printStackTrace();
+        } finally {
+            if (entityManager != null) {
+                entityManager.close();
+            }
+        }
+    }
+
 }

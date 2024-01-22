@@ -160,13 +160,7 @@ public class MainShopController implements Initializable {
     @FXML
     public TableColumn<CartTableParameters, Boolean> completedColumn;
     @FXML
-    public TextField CustomerIdField;
-    @FXML
-    public TextField OrderValueField;
-    @FXML
-    public CheckBox orderCompletedCheckBox;
-    @FXML
-    public TextField OrderTotalCostField;
+    public TableColumn<CartTableParameters, Void> cartDummyColumn;
 
 
     @FXML
@@ -376,6 +370,28 @@ public class MainShopController implements Initializable {
             cart.setCompleted(event.getNewValue());
             customHibernate.update(cart);
         });
+        Callback<TableColumn<CartTableParameters, Void>, TableCell<CartTableParameters, Void>> callback = param -> {
+            return new TextFieldTableCell<>() {
+                private final Button deleteButton = new Button("Delete");
+                {
+                    deleteButton.setOnAction(event -> {
+                        CartTableParameters row = getTableView().getItems().get(getIndex());
+                        customHibernate.deleteCart(row.getCartId());
+                        cartTable.getItems().remove(row);
+                    });
+                }
+                @Override
+                public void updateItem(Void item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty) {
+                        setGraphic(null);
+                    } else {
+                        setGraphic(deleteButton);
+                    }
+                }
+            };
+        };
+        cartDummyColumn.setCellFactory(callback);
 
 
     }
@@ -746,22 +762,5 @@ public class MainShopController implements Initializable {
         cartTable.setItems(cartTableParametersObservableList);
     }
 
-
-    public void deleteCart() {
-        try {
-            Cart selectedCart = (Cart) cartTable.getSelectionModel().getSelectedItem();
-
-            if (selectedCart == null) {
-                JavaFxCustomUtils.generateAlert(Alert.AlertType.ERROR, "No Selection", "No cart selected", "Please select a cart in the list.");
-                return;
-            }
-            getAllCarts();
-        } catch (IllegalArgumentException e) {
-            JavaFxCustomUtils.generateAlert(Alert.AlertType.ERROR, "Error", "Error occurred while deleting the cart", "Please try again");
-        } catch (Exception e) {
-            e.printStackTrace();
-            JavaFxCustomUtils.generateAlert(Alert.AlertType.ERROR, "Error", "Error occurred while deleting the cart", "Please try again");
-        }
-    }
 
 }
