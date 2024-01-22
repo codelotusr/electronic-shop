@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -47,6 +48,14 @@ public abstract class User implements Serializable {
         this.birthDate = birthDate;
     }
 
+    public void setPassword(String password) {
+        String hashed = BCrypt.hashpw(password, BCrypt.gensalt());
+        this.password = hashed;
+    }
+
+    public boolean checkPassword(String plainTextPassword) {
+        return BCrypt.checkpw(plainTextPassword, this.password);
+    }
 
     @Override
     public String toString() {

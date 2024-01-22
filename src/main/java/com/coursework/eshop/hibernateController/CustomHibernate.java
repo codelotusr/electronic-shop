@@ -20,11 +20,16 @@ public class CustomHibernate extends GenericHibernate {
             CriteriaBuilder cb = entityManager.getCriteriaBuilder();
             CriteriaQuery<User> query = cb.createQuery(User.class);
             Root<User> root = query.from(User.class);
-            query.select(root).where(cb.and(cb.like(root.get("username"), username), cb.like(root.get("password"), password)));
-            Query q;
 
-            q = entityManager.createQuery(query);
-            return (User) q.getSingleResult();
+            query.select(root).where(cb.equal(root.get("username"), username));
+
+            TypedQuery<User> typedQuery = entityManager.createQuery(query);
+            User user = typedQuery.getSingleResult();
+
+            if (user != null && user.checkPassword(password)) {
+                return user;
+            }
+            return null;
         } catch (NoResultException e) {
             JavaFxCustomUtils.generateAlert(
                     javafx.scene.control.Alert.AlertType.ERROR,
@@ -36,6 +41,7 @@ public class CustomHibernate extends GenericHibernate {
             if (entityManager != null) entityManager.close();
         }
     }
+
 
     public void deleteProduct(int id) {
         EntityManager entityManager = getEntityManager();

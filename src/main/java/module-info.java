@@ -8,6 +8,8 @@ module com.coursework.eshop {
     requires spring.web;
     requires spring.core;
     requires spring.context;
+    requires com.google.gson;
+    requires jbcrypt;
 
     opens com.coursework.eshop to javafx.fxml;
     exports com.coursework.eshop;
@@ -17,5 +19,6 @@ module com.coursework.eshop {
     exports com.coursework.eshop.model;
     opens com.coursework.eshop.fxController.tableViews to javafx.fxml;
     exports com.coursework.eshop.fxController.tableViews;
+
 
 }

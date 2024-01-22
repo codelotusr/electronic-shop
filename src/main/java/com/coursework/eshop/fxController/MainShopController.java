@@ -132,8 +132,6 @@ public class MainShopController implements Initializable {
     @FXML
     public AnchorPane mainAnchorPane;
     @FXML
-    public ListView<Order> ordersList;
-    @FXML
     public Button adminRegister;
     @FXML
     private ColorPicker mainColorPicker;
