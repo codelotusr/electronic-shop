@@ -9,6 +9,7 @@ import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -33,6 +34,7 @@ public class Comment {
         this.commentTitle = commentTitle;
         this.commentBody = commentBody;
         this.dateCreated = LocalDate.now();
+        this.replies = new ArrayList<>();
     }
 
     public Comment(String commentTitle, String commentBody, Comment parentComment) {
@@ -40,6 +42,7 @@ public class Comment {
         this.commentBody = commentBody;
         this.dateCreated = LocalDate.now();
         this.parentComment = parentComment;
+        this.replies = new ArrayList<>();
     }
 
     @Override

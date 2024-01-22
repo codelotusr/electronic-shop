@@ -30,8 +30,8 @@ public class GraphicsCard extends Product {
         this.tdp = tdp;
     }
 
-    public GraphicsCard(String title, String description, String manufacturer, Warehouse warehouse, String memoryType, int memorySize, int memoryFrequency, int coreFrequency, int tdp) {
-        super(title, description, manufacturer, warehouse);
+    public GraphicsCard(String title, String description, String manufacturer, Warehouse warehouse, double price, String memoryType, int memorySize, int memoryFrequency, int coreFrequency, int tdp) {
+        super(title, description, manufacturer, warehouse, price);
         this.memoryType = memoryType;
         this.memorySize = memorySize;
         this.memoryFrequency = memoryFrequency;

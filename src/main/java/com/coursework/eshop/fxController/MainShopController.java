@@ -5,6 +5,7 @@ import com.coursework.eshop.fxController.tableViews.CustomerTableParameters;
 import com.coursework.eshop.fxController.tableViews.ManagerTableParameters;
 import com.coursework.eshop.hibernateController.CustomHibernate;
 import com.coursework.eshop.model.*;
+import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -24,6 +25,7 @@ import javafx.util.Callback;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -32,8 +34,6 @@ public class MainShopController implements Initializable {
 
     @FXML
     public ListView<Product> productList;
-    @FXML
-    public ListView<Cart> currentCartList;
     @FXML
     public Tab productTab;
     @FXML
@@ -134,6 +134,14 @@ public class MainShopController implements Initializable {
     @FXML
     public Button adminRegister;
     @FXML
+    public Label totalPriceLabel;
+    @FXML
+    public ListView<Cart> ordersList;
+    @FXML
+    public TextField productPriceField;
+    @FXML
+    public ListView<Product> currentItemsInCartList;
+    @FXML
     private ColorPicker mainColorPicker;
     private final ObservableList<CustomerTableParameters> customerTableParametersObservableList = FXCollections.observableArrayList();
     private final ObservableList<ManagerTableParameters> managerTableParametersObservableList = FXCollections.observableArrayList();
@@ -165,10 +173,6 @@ public class MainShopController implements Initializable {
         commentList.getItems().addAll(customHibernate.readAllRecords(Comment.class));
     }
 
-    private void loadCartList() {
-        currentCartList.getItems().clear();
-        currentCartList.getItems().addAll(customHibernate.readAllRecords(Cart.class));
-    }
 
     private void limitAccess() {
         if (currentUser.getClass() == Manager.class) {
@@ -324,7 +328,6 @@ public class MainShopController implements Initializable {
         } else if (usersTab.isSelected()) {
             loadUserTables();
         } else if (primaryTab.isSelected()) {
-            loadCartList();
             loadProductList();
         }
 
@@ -457,13 +460,13 @@ public class MainShopController implements Initializable {
     public void addNewProduct() {
         if (productType.getSelectionModel().getSelectedItem() == ProductType.CPU) {
             Warehouse selectedWarehouse = warehouseComboBox.getSelectionModel().getSelectedItem();
-            customHibernate.create(new CentralProcessingUnit(productTitleField.getText(), productDescriptionField.getText(), productManufacturerField.getText(), customHibernate.readEntityById(Warehouse.class, selectedWarehouse.getId()), socketField.getText(), Integer.parseInt(coreCountField.getText()), Integer.parseInt(coreFrequencyField.getText()), Integer.parseInt(tdpField.getText())));
+            customHibernate.create(new CentralProcessingUnit(productTitleField.getText(), productDescriptionField.getText(), productManufacturerField.getText(), customHibernate.readEntityById(Warehouse.class, selectedWarehouse.getId()), Double.parseDouble(productPriceField.getText()), socketField.getText(), Integer.parseInt(coreCountField.getText()), Integer.parseInt(coreFrequencyField.getText()), Integer.parseInt(tdpField.getText())));
         } else if (productType.getSelectionModel().getSelectedItem() == ProductType.MOTHERBOARD) {
             Warehouse selectedWarehouse = warehouseComboBox.getSelectionModel().getSelectedItem();
-            customHibernate.create(new Motherboard(productTitleField.getText(), productDescriptionField.getText(), productManufacturerField.getText(), customHibernate.readEntityById(Warehouse.class, selectedWarehouse.getId()), socketField.getText(), chipsetField.getText(), memoryTypeField.getText(), Integer.parseInt(memorySizeField.getText()), Integer.parseInt(memoryFrequencyField.getText())));
+            customHibernate.create(new Motherboard(productTitleField.getText(), productDescriptionField.getText(), productManufacturerField.getText(), customHibernate.readEntityById(Warehouse.class, selectedWarehouse.getId()), Double.parseDouble(productPriceField.getText()), socketField.getText(), chipsetField.getText(), memoryTypeField.getText(), Integer.parseInt(memorySizeField.getText()), Integer.parseInt(memoryFrequencyField.getText())));
         } else if (productType.getSelectionModel().getSelectedItem() == ProductType.GRAPHICS_CARD) {
             Warehouse selectedWarehouse = warehouseComboBox.getSelectionModel().getSelectedItem();
-            customHibernate.create(new GraphicsCard(productTitleField.getText(), productDescriptionField.getText(), productManufacturerField.getText(), customHibernate.readEntityById(Warehouse.class, selectedWarehouse.getId()), memoryTypeField.getText(), Integer.parseInt(memorySizeField.getText()), Integer.parseInt(memoryFrequencyField.getText()), Integer.parseInt(coreFrequencyField.getText()), Integer.parseInt(tdpField.getText())));
+            customHibernate.create(new GraphicsCard(productTitleField.getText(), productDescriptionField.getText(), productManufacturerField.getText(), customHibernate.readEntityById(Warehouse.class, selectedWarehouse.getId()), Double.parseDouble(productPriceField.getText()), memoryTypeField.getText(), Integer.parseInt(memorySizeField.getText()), Integer.parseInt(memoryFrequencyField.getText()), Integer.parseInt(coreFrequencyField.getText()), Integer.parseInt(tdpField.getText())));
         }
         loadProductListManager();
     }
@@ -564,14 +567,86 @@ public class MainShopController implements Initializable {
                 (int) (color.getBlue() * 255));
     }
 
-    public void removeOrder() {
+    @FXML
+    protected void addToCart() {
+        Product selectedProduct = productList.getSelectionModel().getSelectedItem();
+
+        if (selectedProduct != null) {
+            currentItemsInCartList.getItems().add(selectedProduct);
+            updateTotalAmount();
+
+        } else {
+            JavaFxCustomUtils.generateAlert(Alert.AlertType.ERROR, "No Selection", "No product selected to add to the cart.", "Please select a product to add to the cart.");
+        }
+    }
+
+    @FXML
+    protected void removeFromCart() {
+        Product selectedProduct = currentItemsInCartList.getSelectionModel().getSelectedItem();
+
+
+        if (selectedProduct != null) {
+
+            currentItemsInCartList.getItems().remove(selectedProduct);
+            updateTotalAmount();
+        } else {
+            JavaFxCustomUtils.generateAlert(Alert.AlertType.ERROR, "No Selection", "No product selected to remove from the cart.", "Please select a product to remove from the cart.");
+        }
+    }
+
+    private void updateTotalAmount() {
+        double totalAmount = currentItemsInCartList.getItems().stream().mapToDouble(Product::getPrice).sum();
+        totalPriceLabel.setText(String.format("%.2f", totalAmount));
+    }
+
+
+    public void addProductsToCart() {
+        EntityManager em = null;
+        try {
+            em = customHibernate.getEntityManager();
+            em.getTransaction().begin();
+            ObservableList<Product> productsInOrder = currentItemsInCartList.getItems();
+            if (productsInOrder.isEmpty()) {
+                JavaFxCustomUtils.generateAlert(Alert.AlertType.ERROR, "Error", "No products in the cart", "Please add products to the cart");
+                return;
+            }
+            Cart newCart = new Cart();
+            newCart.setDateCreated(LocalDate.now());
+            newCart.setOwner(currentUser);
+            newCart.setItemsInCart(new ArrayList<>());
+            double totalValue = 0.0;
+            for (Product product : productsInOrder) {
+                Product managedProduct = em.merge(product);
+                managedProduct.setCart(newCart);
+                newCart.getItemsInCart().add(managedProduct);
+                totalValue += managedProduct.getPrice();
+            }
+
+            newCart.setCart_value(totalValue);
+
+            em.persist(newCart);
+
+            em.getTransaction().commit();
+            currentItemsInCartList.getItems().clear();
+
+        } catch (Exception e) {
+
+            if (em != null) {
+                em.getTransaction().rollback();
+            }
+            JavaFxCustomUtils.generateAlert(Alert.AlertType.ERROR, "Error", "Error occurred while saving the order", "Please try again");
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
     }
 
     public void adminRegisterNewUser() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(StartGui.class.getResource("registration.fxml"));
         Parent parent = fxmlLoader.load();
         RegistrationController registrationController = fxmlLoader.getController();
-        registrationController.setData(entityManagerFactory, false);
+        registrationController.setData(entityManagerFactory, true);
         Scene scene = new Scene(parent);
         Stage stage = (Stage) socketField.getScene().getWindow();
         stage.setTitle("Registration");

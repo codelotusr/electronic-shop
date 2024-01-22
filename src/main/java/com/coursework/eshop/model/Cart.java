@@ -22,6 +22,9 @@ public class Cart {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private LocalDate dateCreated;
+    private double cart_value;
+    private boolean isCompleted;
+
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Product> itemsInCart;
@@ -29,9 +32,11 @@ public class Cart {
     @JoinColumn(name = "customer_id", nullable = false)
     private User owner;
 
-    public Cart(User owner) {
+    public Cart(int id, double cart_value, User owner, boolean isCompleted) {
+        this.id = id;
         this.owner = owner;
         this.dateCreated = LocalDate.now();
-        this.itemsInCart = new ArrayList<>();
+        this.cart_value = cart_value;
+        this.isCompleted = isCompleted;
     }
 }

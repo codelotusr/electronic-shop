@@ -28,8 +28,8 @@ public class Motherboard extends Product {
         this.maxMemoryFrequency = memoryFrequency;
     }
 
-    public Motherboard(String title, String description, String manufacturer, Warehouse warehouse, String socket, String chipset, String memoryType, int maxMemorySize, int maxMemoryFrequency) {
-        super(title, description, manufacturer, warehouse);
+    public Motherboard(String title, String description, String manufacturer, Warehouse warehouse, double price, String socket, String chipset, String memoryType, int maxMemorySize, int maxMemoryFrequency) {
+        super(title, description, manufacturer, warehouse, price);
         this.socket = socket;
         this.chipset = chipset;
         this.memoryType = memoryType;

@@ -25,8 +25,8 @@ public class CentralProcessingUnit extends Product {
         this.tdp = tdp;
     }
 
-    public CentralProcessingUnit(String title, String description, String manufacturer, Warehouse warehouse, String socket, int coreCount, int coreFrequency, int tdp) {
-        super(title, description, manufacturer, warehouse);
+    public CentralProcessingUnit(String title, String description, String manufacturer, Warehouse warehouse, double price, String socket, int coreCount, int coreFrequency, int tdp) {
+        super(title, description, manufacturer, warehouse, price);
         this.socket = socket;
         this.coreCount = coreCount;
         this.coreFrequency = coreFrequency;

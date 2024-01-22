@@ -3,6 +3,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ColorPicker?>
 <?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
@@ -20,11 +21,14 @@
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <ListView fx:id="productList" layoutX="14.0" layoutY="10.0" prefHeight="344.0" prefWidth="202.0" AnchorPane.bottomAnchor="9.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="375.0" AnchorPane.topAnchor="10.0" />
-                        <Button layoutX="229.0" layoutY="205.0" mnemonicParsing="false" text="Add to cart" AnchorPane.bottomAnchor="133.0" AnchorPane.leftAnchor="229.0" AnchorPane.rightAnchor="286.0" AnchorPane.topAnchor="205.0" />
-                        <ListView fx:id="currentCartList" layoutX="229.0" layoutY="14.0" prefHeight="179.0" prefWidth="345.0" AnchorPane.bottomAnchor="170.0" AnchorPane.leftAnchor="229.0" AnchorPane.rightAnchor="17.0" AnchorPane.topAnchor="14.0" />
-                        <Button layoutX="323.0" layoutY="205.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="117.0" text="Remove from cart" />
-                        <Button layoutX="452.0" layoutY="205.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="107.0" text="Place order" />
+                        <ListView fx:id="productList" layoutX="14.0" layoutY="9.0" prefHeight="344.0" prefWidth="202.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="375.0" AnchorPane.topAnchor="9.0" />
+                        <Button layoutX="237.0" layoutY="238.0" mnemonicParsing="false" onAction="#addToCart" prefHeight="24.0" prefWidth="82.0" text="Add to cart" AnchorPane.bottomAnchor="101.0" AnchorPane.leftAnchor="237.0" AnchorPane.rightAnchor="272.0" AnchorPane.topAnchor="238.0" />
+                        <ListView fx:id="currentItemsInCartList" layoutX="228.8" layoutY="24.2" prefHeight="179.0" prefWidth="345.0" AnchorPane.bottomAnchor="160.6" AnchorPane.leftAnchor="228.8" AnchorPane.rightAnchor="16.799999999999955" AnchorPane.topAnchor="24.2" />
+                        <Button layoutX="335.0" layoutY="237.0" mnemonicParsing="false" onAction="#removeFromCart" prefHeight="25.0" prefWidth="117.0" text="Remove from cart" AnchorPane.bottomAnchor="100.60000000000002" AnchorPane.leftAnchor="335.0" AnchorPane.rightAnchor="138.60000000000002" AnchorPane.topAnchor="237.0" />
+                        <Button layoutX="466.0" layoutY="237.0" mnemonicParsing="false" onAction="#addProductsToCart" prefHeight="25.0" prefWidth="107.0" text="Place order" AnchorPane.bottomAnchor="100.79999999999998" AnchorPane.leftAnchor="465.6000000000001" AnchorPane.rightAnchor="18.0" AnchorPane.topAnchor="237.0" />
+                        <Label layoutX="229.0" layoutY="203.0" text="Cart price:" AnchorPane.bottomAnchor="142.4" AnchorPane.leftAnchor="228.80000000000004" AnchorPane.rightAnchor="307.80000000000007" AnchorPane.topAnchor="203.0" />
+                        <Label fx:id="totalPriceLabel" layoutX="292.0" layoutY="202.0" text="0" />
+                        <Label layoutX="229.0" layoutY="6.0" text="Items in cart:" />
                      </children></AnchorPane>
             </content>
           </Tab>
@@ -80,7 +84,6 @@
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
                         <ListView fx:id="ordersList" layoutX="14.0" layoutY="14.0" prefHeight="274.0" prefWidth="562.0" />
-                        <Button layoutX="250.0" layoutY="313.0" mnemonicParsing="false" onAction="#removeOrder" text="Remove order" />
                      </children></AnchorPane>
               </content>
             </Tab>
@@ -105,6 +108,7 @@
                         <Button layoutX="304.0" layoutY="318.0" mnemonicParsing="false" onAction="#addNewProduct" prefHeight="25.0" prefWidth="70.0" text="Add" />
                         <Button layoutX="398.0" layoutY="318.0" mnemonicParsing="false" onAction="#updateProduct" prefHeight="25.0" prefWidth="69.0" text="Update" />
                         <Button layoutX="488.0" layoutY="318.0" mnemonicParsing="false" onAction="#deleteProduct" prefHeight="25.0" prefWidth="68.0" text="Delete" />
+                        <TextField fx:id="productPriceField" layoutX="258.0" layoutY="286.0" prefHeight="10.0" prefWidth="318.0" promptText="Price" />
                      </children>
                   </AnchorPane>
               </content>

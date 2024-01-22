@@ -42,11 +42,12 @@ public class Product implements Serializable {
         this.description = description;
     }
 
-    public Product(String title, String description, String manufacturer, Warehouse warehouse) {
+    public Product(String title, String description, String manufacturer, Warehouse warehouse, double price) {
         this.title = title;
         this.description = description;
         this.manufacturer = manufacturer;
         this.warehouse = warehouse;
+        this.price = price;
     }
 
     public Product(String title, String description, String manufacturer) {
