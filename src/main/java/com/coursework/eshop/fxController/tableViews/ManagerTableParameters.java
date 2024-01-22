@@ -21,7 +21,8 @@ public class ManagerTableParameters extends UserTableParameters {
         this.employeeId.set(employeeId);
     }
 
-    public boolean isIsAdmin() {
+
+    public boolean getIsAdministrator() {
         return isAdmin.get();
     }
 

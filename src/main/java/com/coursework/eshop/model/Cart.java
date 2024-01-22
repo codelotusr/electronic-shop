@@ -39,4 +39,12 @@ public class Cart {
         this.cart_value = cart_value;
         this.isCompleted = isCompleted;
     }
+
+    public double getCartValue() {
+        return cart_value;
+    }
+
+    public int getOwnerId() {
+        return owner.getId();
+    }
 }

@@ -80,12 +80,20 @@
               </content>
             </Tab>
             <Tab fx:id="ordersTab" onSelectionChanged="#loadTabValues" text="Orders">
-              <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                     <children>
-                        <ListView fx:id="ordersList" layoutX="14.0" layoutY="14.0" prefHeight="274.0" prefWidth="562.0" />
-                     </children></AnchorPane>
-              </content>
+                <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                        <TableView fx:id="cartTable" prefHeight="379.0" prefWidth="572.0">
+                            <columns>
+                                <TableColumn fx:id="cartIdColumn" prefWidth="60.79998779296875" text="ID" />
+                                <TableColumn fx:id="dateCreatedColumn" prefWidth="92.0" text="Date Created" />
+                                <TableColumn fx:id="cartValueColumn" prefWidth="83.20001220703125" text="Cart Value" />
+                                <TableColumn fx:id="userIdColumn" minWidth="0.0" prefWidth="63.20001220703125" text="User ID" />
+                                <TableColumn fx:id="completedColumn" prefWidth="82.4000244140625" text="Completed" />
+
+                            </columns>
+                        </TableView>
+                    </AnchorPane>
+                </content>
             </Tab>
             <Tab fx:id="productTab" onSelectionChanged="#loadTabValues" text="Product">
               <content>
@@ -108,7 +116,7 @@
                         <Button layoutX="304.0" layoutY="318.0" mnemonicParsing="false" onAction="#addNewProduct" prefHeight="25.0" prefWidth="70.0" text="Add" />
                         <Button layoutX="398.0" layoutY="318.0" mnemonicParsing="false" onAction="#updateProduct" prefHeight="25.0" prefWidth="69.0" text="Update" />
                         <Button layoutX="488.0" layoutY="318.0" mnemonicParsing="false" onAction="#deleteProduct" prefHeight="25.0" prefWidth="68.0" text="Delete" />
-                        <TextField fx:id="productPriceField" layoutX="258.0" layoutY="286.0" prefHeight="10.0" prefWidth="318.0" promptText="Price" />
+                        <TextField fx:id="productPriceField" layoutX="258.0" layoutY="286.0" prefHeight="10.0" prefWidth="318.0" promptText="Price" AnchorPane.bottomAnchor="51.20000000000001" AnchorPane.leftAnchor="257.6" AnchorPane.rightAnchor="14.800000000000068" AnchorPane.topAnchor="286.0" />
                      </children>
                   </AnchorPane>
               </content>

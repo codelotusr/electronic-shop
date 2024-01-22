@@ -3,10 +3,9 @@ package com.coursework.eshop.hibernateController;
 import com.coursework.eshop.fxController.JavaFxCustomUtils;
 import com.coursework.eshop.model.*;
 import jakarta.persistence.*;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Root;
+import jakarta.persistence.criteria.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CustomHibernate extends GenericHibernate {
@@ -153,4 +152,26 @@ public class CustomHibernate extends GenericHibernate {
         }
     }
 
+    public List<Cart> getAllCartsForSpecificUser(int id) {
+        EntityManager em = null;
+        List<Cart> result = new ArrayList<>();
+        try {
+            em = getEntityManager();
+            CriteriaBuilder cb = em.getCriteriaBuilder();
+            CriteriaQuery<Cart> cq = cb.createQuery(Cart.class);
+
+            Root<Cart> cart = cq.from(Cart.class);
+            Join<Cart, User> userJoin = cart.join("user");
+
+            Predicate userPredicate = cb.equal(userJoin.get("id"), id);
+
+            cq.where(userPredicate);
+            result = em.createQuery(cq).getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (em != null) em.close();
+        }
+        return result;
+    }
 }

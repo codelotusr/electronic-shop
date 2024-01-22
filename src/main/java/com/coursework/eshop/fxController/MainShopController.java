@@ -1,12 +1,15 @@
 package com.coursework.eshop.fxController;
 
 import com.coursework.eshop.StartGui;
+import com.coursework.eshop.fxController.tableViews.CartTableParameters;
 import com.coursework.eshop.fxController.tableViews.CustomerTableParameters;
 import com.coursework.eshop.fxController.tableViews.ManagerTableParameters;
 import com.coursework.eshop.hibernateController.CustomHibernate;
 import com.coursework.eshop.model.*;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+import javafx.application.Platform;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -22,6 +25,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import javafx.util.converter.BooleanStringConverter;
+import javafx.util.converter.DoubleStringConverter;
 
 import java.io.IOException;
 import java.net.URL;
@@ -29,6 +34,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 public class MainShopController implements Initializable {
 
@@ -142,9 +148,33 @@ public class MainShopController implements Initializable {
     @FXML
     public ListView<Product> currentItemsInCartList;
     @FXML
+    public TableView cartTable;
+    @FXML
+    public TableColumn<CartTableParameters, Integer> cartIdColumn;
+    @FXML
+    public TableColumn<CartTableParameters, LocalDate> dateCreatedColumn;
+    @FXML
+    public TableColumn<CartTableParameters, Double> cartValueColumn;
+    @FXML
+    public TableColumn<CartTableParameters, Integer> userIdColumn;
+    @FXML
+    public TableColumn<CartTableParameters, Boolean> completedColumn;
+    @FXML
+    public TextField CustomerIdField;
+    @FXML
+    public TextField OrderValueField;
+    @FXML
+    public CheckBox orderCompletedCheckBox;
+    @FXML
+    public TextField OrderTotalCostField;
+
+
+    @FXML
     private ColorPicker mainColorPicker;
     private final ObservableList<CustomerTableParameters> customerTableParametersObservableList = FXCollections.observableArrayList();
     private final ObservableList<ManagerTableParameters> managerTableParametersObservableList = FXCollections.observableArrayList();
+    private final ObservableList<CartTableParameters> cartTableParametersObservableList = FXCollections.observableArrayList();
+
     private EntityManagerFactory entityManagerFactory;
     private User currentUser;
     private CustomHibernate customHibernate;
@@ -180,6 +210,7 @@ public class MainShopController implements Initializable {
             if (!manager.isAdministrator()) {
                 managerTable.setVisible(false);
                 adminRegister.setDisable(true);
+                customerTable.setEditable(false);
             }
             tabPane.getTabs().remove(primaryTab);
         } else if (currentUser.getClass() == Customer.class) {
@@ -202,6 +233,16 @@ public class MainShopController implements Initializable {
         productType.getItems().addAll(ProductType.values());
         customerTableParams();
         managerTableParams();
+        cartTableParams();
+        tabPane.getSelectionModel().selectedItemProperty().addListener((obs, oldTab, newTab) -> {
+            if (newTab == usersTab) {
+                Platform.runLater(() -> {
+                    loadUserTables();
+                    customerTable.refresh();
+                    managerTable.refresh();
+                });
+            }
+        });
     }
 
     private void managerTableParams() {
@@ -249,7 +290,6 @@ public class MainShopController implements Initializable {
             customHibernate.update(manager);
         });
         managerIsAdministratorColumn.setCellValueFactory(new PropertyValueFactory<>("isAdministrator"));
-
         Callback<TableColumn<ManagerTableParameters, Void>, TableCell<ManagerTableParameters, Void>> callback = param -> {
             return new TextFieldTableCell<>() {
                 private final Button deleteButton = new Button("Delete");
@@ -315,6 +355,31 @@ public class MainShopController implements Initializable {
         dummyColumn.setCellFactory(callback);
     }
 
+    private void cartTableParams() {
+        cartTable.setEditable(true);
+        cartIdColumn.setCellValueFactory(new PropertyValueFactory<>("cartId"));
+        dateCreatedColumn.setCellValueFactory(new PropertyValueFactory<>("dateCreated"));
+        cartValueColumn.setCellValueFactory(new PropertyValueFactory<>("cartValue"));
+        cartValueColumn.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleStringConverter()));
+        cartValueColumn.setOnEditCommit(event -> {
+            event.getTableView().getItems().get(event.getTablePosition().getRow()).setCartValue(event.getNewValue());
+            Cart cart = customHibernate.readEntityById(Cart.class, event.getTableView().getItems().get(event.getTablePosition().getRow()).getCartId());
+            cart.setCart_value(event.getNewValue());
+            customHibernate.update(cart);
+        });
+        userIdColumn.setCellValueFactory(new PropertyValueFactory<>("ownerId"));
+        completedColumn.setCellValueFactory(new PropertyValueFactory<>("isCompleted"));
+        completedColumn.setCellFactory(TextFieldTableCell.forTableColumn(new BooleanStringConverter()));
+        completedColumn.setOnEditCommit(event -> {
+            event.getTableView().getItems().get(event.getTablePosition().getRow()).setIsCompleted(event.getNewValue());
+            Cart cart = customHibernate.readEntityById(Cart.class, event.getTableView().getItems().get(event.getTablePosition().getRow()).getCartId());
+            cart.setCompleted(event.getNewValue());
+            customHibernate.update(cart);
+        });
+
+
+    }
+
     public void loadTabValues() {
         if (productTab.isSelected()) {
             disableAllOnTabSelect();
@@ -327,11 +392,17 @@ public class MainShopController implements Initializable {
             loadCommentList();
         } else if (usersTab.isSelected()) {
             loadUserTables();
+            customerTable.refresh();
+            managerTable.refresh();
         } else if (primaryTab.isSelected()) {
             loadProductList();
+        } else if (ordersTab.isSelected()) {
+            getAllCarts();
         }
 
     }
+
+
     private void loadProductList() {
         productList.getItems().clear();
         List<Product> allProducts = customHibernate.readAllRecords(Product.class);
@@ -653,4 +724,44 @@ public class MainShopController implements Initializable {
         stage.setScene(scene);
         stage.show();
     }
+
+    public void getAllCarts() {
+        List<Cart> carts;
+        if (currentUser instanceof Customer) {
+            carts = customHibernate.getAllCartsForSpecificUser(currentUser.getId());
+        } else {
+            carts = customHibernate.readAllRecords(Cart.class);
+        }
+
+        List<CartTableParameters> cartTableParams = carts.stream()
+                .map(cart -> new CartTableParameters(
+                        cart.getId(),
+                        cart.getDateCreated(),
+                        cart.getCartValue(),
+                        cart.getOwnerId(),
+                        cart.isCompleted()))
+                .collect(Collectors.toList());
+
+        cartTableParametersObservableList.setAll(cartTableParams);
+        cartTable.setItems(cartTableParametersObservableList);
+    }
+
+
+    public void deleteCart() {
+        try {
+            Cart selectedCart = (Cart) cartTable.getSelectionModel().getSelectedItem();
+
+            if (selectedCart == null) {
+                JavaFxCustomUtils.generateAlert(Alert.AlertType.ERROR, "No Selection", "No cart selected", "Please select a cart in the list.");
+                return;
+            }
+            getAllCarts();
+        } catch (IllegalArgumentException e) {
+            JavaFxCustomUtils.generateAlert(Alert.AlertType.ERROR, "Error", "Error occurred while deleting the cart", "Please try again");
+        } catch (Exception e) {
+            e.printStackTrace();
+            JavaFxCustomUtils.generateAlert(Alert.AlertType.ERROR, "Error", "Error occurred while deleting the cart", "Please try again");
+        }
+    }
+
 }
