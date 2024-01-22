@@ -24,9 +24,6 @@ public class Warehouse implements Serializable {
     private int id;
     private String title;
     private String address;
-    @ManyToMany(mappedBy = "worksAtWarehouse", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    @LazyCollection(LazyCollectionOption.FALSE)
-    private List<Manager> managers;
     @OneToMany(mappedBy = "warehouse", cascade = CascadeType.ALL)
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Product> inStockProducts;
@@ -35,7 +32,6 @@ public class Warehouse implements Serializable {
         this.title = title;
         this.address = address;
         this.inStockProducts = new ArrayList<>();
-        this.managers = new ArrayList<>();
     }
 
     @Override

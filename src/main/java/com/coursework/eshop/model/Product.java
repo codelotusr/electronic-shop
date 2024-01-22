@@ -25,8 +25,10 @@ public class Product implements Serializable {
     String title;
     String description;
     String manufacturer;
+    double price;
 
     @ManyToOne
+    @JoinColumn(name = "warehouse_id")
     Warehouse warehouse;
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     @LazyCollection(LazyCollectionOption.FALSE)
@@ -51,6 +53,13 @@ public class Product implements Serializable {
         this.title = title;
         this.description = description;
         this.manufacturer = manufacturer;
+    }
+
+    public Product(String title, String description, String manufacturer, double price) {
+        this.title = title;
+        this.description = description;
+        this.manufacturer = manufacturer;
+        this.price = price;
     }
 
     @Override

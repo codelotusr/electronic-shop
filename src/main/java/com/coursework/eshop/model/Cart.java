@@ -26,6 +26,7 @@ public class Cart {
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Product> itemsInCart;
     @ManyToOne
+    @JoinColumn(name = "customer_id", nullable = false)
     private User owner;
 
     public Cart(User owner) {
