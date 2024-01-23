@@ -1,6 +1,7 @@
 package com.coursework.eshop.fxController;
 
 import com.coursework.eshop.StartGui;
+import com.coursework.eshop.fxController.tableViews.CartStatisticsTableParameters;
 import com.coursework.eshop.fxController.tableViews.CartTableParameters;
 import com.coursework.eshop.fxController.tableViews.CustomerTableParameters;
 import com.coursework.eshop.fxController.tableViews.ManagerTableParameters;
@@ -18,6 +19,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
@@ -33,6 +35,7 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
@@ -142,8 +145,6 @@ public class MainShopController implements Initializable {
     @FXML
     public Label totalPriceLabel;
     @FXML
-    public ListView<Cart> ordersList;
-    @FXML
     public TextField productPriceField;
     @FXML
     public ListView<Product> currentItemsInCartList;
@@ -161,6 +162,32 @@ public class MainShopController implements Initializable {
     public TableColumn<CartTableParameters, Boolean> completedColumn;
     @FXML
     public TableColumn<CartTableParameters, Void> cartDummyColumn;
+    @FXML
+    public Tab statisticsTab;
+    @FXML
+    public TableView cartData;
+    @FXML
+    public TableColumn<CartStatisticsTableParameters, Integer> buyerColumn;
+    @FXML
+    public TableColumn<CartStatisticsTableParameters, LocalDate> dateColumn;
+    @FXML
+    public TableColumn<CartStatisticsTableParameters, Double> valueColumn;
+    @FXML
+    public TableColumn<CartStatisticsTableParameters, Integer> ownerColumn;
+    @FXML
+    public ListView priceView;
+    @FXML
+    public TextField minCostField;
+    @FXML
+    public TextField maxCostField;
+    @FXML
+    public TextField userIdField;
+    @FXML
+    public DatePicker fromField;
+    @FXML
+    public DatePicker toField;
+    @FXML
+    public PieChart cartValuePieChart;
 
 
     @FXML
@@ -168,6 +195,7 @@ public class MainShopController implements Initializable {
     private final ObservableList<CustomerTableParameters> customerTableParametersObservableList = FXCollections.observableArrayList();
     private final ObservableList<ManagerTableParameters> managerTableParametersObservableList = FXCollections.observableArrayList();
     private final ObservableList<CartTableParameters> cartTableParametersObservableList = FXCollections.observableArrayList();
+    private final ObservableList<CartStatisticsTableParameters> cartStatisticsTableParametersObservableList = FXCollections.observableArrayList();
 
     private EntityManagerFactory entityManagerFactory;
     private User currentUser;
@@ -228,6 +256,7 @@ public class MainShopController implements Initializable {
         customerTableParams();
         managerTableParams();
         cartTableParams();
+        cartStatisticsTableParams();
         tabPane.getSelectionModel().selectedItemProperty().addListener((obs, oldTab, newTab) -> {
             if (newTab == usersTab) {
                 Platform.runLater(() -> {
@@ -396,6 +425,13 @@ public class MainShopController implements Initializable {
 
     }
 
+    private void cartStatisticsTableParams() {
+        buyerColumn.setCellValueFactory(new PropertyValueFactory<>("buyerId"));
+        dateColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
+        valueColumn.setCellValueFactory(new PropertyValueFactory<>("cartValue"));
+        ownerColumn.setCellValueFactory(new PropertyValueFactory<>("ownerId"));
+    }
+
     public void loadTabValues() {
         if (productTab.isSelected()) {
             disableAllOnTabSelect();
@@ -414,9 +450,28 @@ public class MainShopController implements Initializable {
             loadProductList();
         } else if (ordersTab.isSelected()) {
             getAllCarts();
+        } else if (statisticsTab.isSelected()) {
+            loadCartStatistics();
         }
 
     }
+
+    private void loadCartStatistics() {
+        List<Cart> carts = customHibernate.readAllRecords(Cart.class);
+        cartStatisticsTableParametersObservableList.clear();
+
+        for (Cart cart : carts) {
+            CartStatisticsTableParameters params = new CartStatisticsTableParameters(
+                    cart.getOwnerId(),
+                    cart.getDateCreated(),
+                    cart.getCartValue(),
+                    cart.getOwnerId());
+            cartStatisticsTableParametersObservableList.add(params);
+        }
+
+        cartData.setItems(cartStatisticsTableParametersObservableList);
+    }
+
 
 
     private void loadProductList() {
@@ -763,4 +818,53 @@ public class MainShopController implements Initializable {
     }
 
 
-}
+    public void filterData() {
+        double minCost = 0.0;
+        double maxCost = Double.MAX_VALUE;
+        int userId = -1;
+        LocalDate fromDate = null;
+        LocalDate toDate = null;
+
+        try {
+            if (!minCostField.getText().isEmpty()) {
+                minCost = Double.parseDouble(minCostField.getText());
+            }
+            if (!maxCostField.getText().isEmpty()) {
+                maxCost = Double.parseDouble(maxCostField.getText());
+            }
+            if (!userIdField.getText().isEmpty()) {
+                userId = Integer.parseInt(userIdField.getText());
+            }
+
+            // Parse dates
+            fromDate = fromField.getValue();
+            toDate = toField.getValue();
+
+            List<Cart> filteredData = customHibernate.filterData(minCost, maxCost, userId, fromDate, toDate);
+
+        cartData.getItems().clear();
+        cartData.getItems().addAll(filteredData);
+        double sumOfValues = filteredData.stream()
+                .mapToDouble(Cart::getCart_value)
+                .sum();
+
+        priceView.getItems().clear();
+        priceView.getItems().add("Total Cart Value: " + String.format("%.2f", sumOfValues));
+
+        Map<LocalDate, Double> summedValuesByDate = filteredData.stream()
+                .collect(Collectors.groupingBy(
+                        Cart::getDateCreated,
+                        Collectors.summingDouble(Cart::getCart_value)));
+
+        cartValuePieChart.getData().clear();
+
+        summedValuesByDate.forEach((date, sum) -> {
+            PieChart.Data slice = new PieChart.Data(date.toString(), sum);
+            cartValuePieChart.getData().add(slice);
+        });
+    } catch (NumberFormatException e) {
+        JavaFxCustomUtils.generateAlert(Alert.AlertType.ERROR, "Error", "Error occurred while filtering data", "Please check your input");
+
+    }
+    }}
+

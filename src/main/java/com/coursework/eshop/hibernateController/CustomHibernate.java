@@ -5,6 +5,7 @@ import com.coursework.eshop.model.*;
 import jakarta.persistence.*;
 import jakarta.persistence.criteria.*;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -219,4 +220,50 @@ public class CustomHibernate extends GenericHibernate {
         }
     }
 
+    public List<Cart> filterData(double minCost, double maxCost, int userId, LocalDate fromDate, LocalDate toDate) {
+        EntityManager em = null;
+        List<Cart> result = new ArrayList<>();
+        try {
+            em = getEntityManager();
+            CriteriaBuilder cb = em.getCriteriaBuilder();
+            CriteriaQuery<Cart> cq = cb.createQuery(Cart.class);
+
+            Root<Cart> cart = cq.from(Cart.class);
+            Join<Cart, User> userJoin = cart.join("owner");
+            List<Predicate> predicates = new ArrayList<>();
+
+            if (minCost > 0) {
+                predicates.add(cb.ge(cart.get("cart_value"), minCost));
+            }
+
+            if (maxCost > 0) {
+                predicates.add(cb.le(cart.get("cart_value"), maxCost));
+            }
+
+            if (userId > 0) {
+                predicates.add(cb.equal(userJoin.get("id"), userId));
+            }
+
+            if (fromDate != null) {
+                predicates.add(cb.greaterThanOrEqualTo(cart.get("dateCreated"), fromDate));
+            }
+
+            if (toDate != null) {
+                predicates.add(cb.lessThanOrEqualTo(cart.get("dateCreated"), toDate));
+            }
+
+            cq.where(predicates.toArray(new Predicate[0]));
+            result = em.createQuery(cq).getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+            JavaFxCustomUtils.generateAlert(
+                    javafx.scene.control.Alert.AlertType.ERROR,
+                    "Error",
+                    "Error",
+                    "Error while filtering data");
+        } finally {
+            if (em != null) em.close();
+        }
+        return result;
+    }
 }

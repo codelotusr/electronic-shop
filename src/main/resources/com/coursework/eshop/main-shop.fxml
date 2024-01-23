@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.chart.PieChart?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ColorPicker?>
 <?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Tab?>
@@ -69,12 +71,12 @@
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <ListView fx:id="warehouseList" layoutX="14.0" layoutY="14.0" onMouseClicked="#loadWarehouseData" prefHeight="342.0" prefWidth="234.0" />
-                        <Button layoutX="264.0" layoutY="306.0" mnemonicParsing="false" onAction="#addNewWarehouse" prefHeight="25.0" prefWidth="86.0" text="Add new" />
-                        <Button layoutX="366.0" layoutY="306.0" mnemonicParsing="false" onAction="#updateExistingWarehouse" prefHeight="25.0" prefWidth="93.0" text="Update" />
-                        <Button layoutX="473.0" layoutY="306.0" mnemonicParsing="false" onAction="#removeExistingWarehouse" prefHeight="25.0" prefWidth="96.0" text="Remove" />
-                        <TextField fx:id="warehouseTitleField" layoutX="264.0" layoutY="25.0" prefHeight="23.0" prefWidth="171.0" promptText="Title" />
-                        <TextField fx:id="warehouseAddressField" layoutX="264.0" layoutY="61.0" prefHeight="25.0" prefWidth="172.0" promptText="Address" />
+                        <ListView fx:id="warehouseList" layoutX="14.0" layoutY="14.0" onMouseClicked="#loadWarehouseData" prefHeight="342.0" prefWidth="234.0" AnchorPane.bottomAnchor="6.400000000000034" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="342.4000000000001" AnchorPane.topAnchor="14.0" />
+                        <Button layoutX="264.0" layoutY="306.0" mnemonicParsing="false" onAction="#addNewWarehouse" prefHeight="25.0" prefWidth="86.0" text="Add new" AnchorPane.bottomAnchor="31.20000000000001" AnchorPane.leftAnchor="264.0" AnchorPane.rightAnchor="240.80000000000004" AnchorPane.topAnchor="306.0" />
+                        <Button layoutX="369.0" layoutY="306.0" mnemonicParsing="false" onAction="#updateExistingWarehouse" prefHeight="25.0" prefWidth="93.0" text="Update" AnchorPane.bottomAnchor="31.600000000000023" AnchorPane.leftAnchor="369.0" AnchorPane.rightAnchor="135.8" AnchorPane.topAnchor="306.0" />
+                        <Button layoutX="480.0" layoutY="306.0" mnemonicParsing="false" onAction="#removeExistingWarehouse" prefHeight="25.0" prefWidth="96.0" text="Remove" AnchorPane.bottomAnchor="31.599999999999966" AnchorPane.leftAnchor="480.0" AnchorPane.rightAnchor="24.799999999999955" AnchorPane.topAnchor="306.0" />
+                        <TextField fx:id="warehouseTitleField" layoutX="264.0" layoutY="25.0" prefHeight="23.0" prefWidth="171.0" promptText="Title" AnchorPane.bottomAnchor="312.79999999999995" AnchorPane.leftAnchor="264.0" AnchorPane.rightAnchor="156.00000000000006" AnchorPane.topAnchor="25.0" />
+                        <TextField fx:id="warehouseAddressField" layoutX="264.0" layoutY="62.0" prefHeight="25.0" prefWidth="172.0" promptText="Address" AnchorPane.bottomAnchor="276.40000000000003" AnchorPane.leftAnchor="264.0" AnchorPane.rightAnchor="156.0" AnchorPane.topAnchor="62.0" />
                      </children>
                   </AnchorPane>
               </content>
@@ -82,7 +84,7 @@
             <Tab fx:id="ordersTab" onSelectionChanged="#loadTabValues" text="Orders">
                 <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                        <TableView fx:id="cartTable" prefHeight="379.0" prefWidth="572.0">
+                        <TableView fx:id="cartTable" prefHeight="379.0" prefWidth="572.0" AnchorPane.bottomAnchor="-16.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="19.200000000000045" AnchorPane.topAnchor="0.0">
                             <columns>
                                 <TableColumn fx:id="cartIdColumn" prefWidth="60.79998779296875" text="ID" />
                                 <TableColumn fx:id="dateCreatedColumn" prefWidth="92.0" text="Date Created" />
@@ -147,6 +149,34 @@
                      </children>
                   </AnchorPane>
               </content>
+            </Tab>
+            <Tab fx:id="statisticsTab" onSelectionChanged="#loadTabValues" text="Statistics">
+                <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+
+                        <TableView fx:id="cartData" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="314.0" AnchorPane.bottomAnchor="152.8" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="266.4000000000001" AnchorPane.topAnchor="10.0">
+                            <columns>
+                                <TableColumn fx:id="buyerColumn" text="ID" />
+                                <TableColumn fx:id="dateColumn" text="Date Created" />
+                                <TableColumn fx:id="valueColumn" text="Sales Value" />
+                                <TableColumn fx:id="ownerColumn" text="Owner ID" />
+                            </columns>
+                        </TableView>
+
+                        <ListView fx:id="priceView" layoutX="282.4" layoutY="269.8" prefHeight="74.0" prefWidth="317.0" AnchorPane.bottomAnchor="27.80000000000001" AnchorPane.leftAnchor="282.4" AnchorPane.rightAnchor="1.6000000000000227" AnchorPane.topAnchor="269.8" />
+
+                        <TextField fx:id="minCostField" layoutX="26.0" layoutY="225.0" prefHeight="26.0" prefWidth="69.0" promptText="Min Cost" AnchorPane.bottomAnchor="111.99999999999997" AnchorPane.leftAnchor="26.0" AnchorPane.rightAnchor="495.20000000000005" AnchorPane.topAnchor="225.0" />
+                        <TextField fx:id="maxCostField" layoutX="105.0" layoutY="225.0" prefHeight="26.0" prefWidth="69.0" promptText="Max Cost" AnchorPane.bottomAnchor="111.80000000000001" AnchorPane.leftAnchor="105.0" AnchorPane.rightAnchor="416.59999999999997" AnchorPane.topAnchor="225.0" />
+                        <TextField fx:id="userIdField" layoutX="179.0" layoutY="224.0" prefHeight="26.0" prefWidth="69.0" promptText="User ID" AnchorPane.bottomAnchor="112.80000000000001" AnchorPane.leftAnchor="179.0" AnchorPane.rightAnchor="342.59999999999997" AnchorPane.topAnchor="224.0" />
+                        <DatePicker fx:id="fromField" layoutX="14.0" layoutY="267.0" prefWidth="200.0" promptText="Start date" AnchorPane.bottomAnchor="70.4" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="376.80000000000007" AnchorPane.topAnchor="267.0" />
+                        <DatePicker fx:id="toField" layoutX="14.0" layoutY="309.0" prefWidth="200.0" promptText="End date" AnchorPane.bottomAnchor="28.799999999999976" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="376.80000000000007" AnchorPane.topAnchor="309.0" />
+
+                        <PieChart fx:id="cartValuePieChart" layoutX="328.0" layoutY="8.6" prefHeight="260.0" prefWidth="265.0" AnchorPane.bottomAnchor="102.60000000000002" AnchorPane.leftAnchor="328.0" AnchorPane.rightAnchor="7.2000000000000455" AnchorPane.topAnchor="8.6" />
+
+                        <Button layoutX="221.0" layoutY="293.0" onAction="#filterData" text="Filter" AnchorPane.bottomAnchor="44.799999999999976" AnchorPane.leftAnchor="221.0" AnchorPane.rightAnchor="328.00000000000006" AnchorPane.topAnchor="293.0" />
+
+                    </AnchorPane>
+                </content>
             </Tab>
         </tabs>
       </TabPane>
