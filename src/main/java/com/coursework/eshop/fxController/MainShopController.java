@@ -674,18 +674,41 @@ public class MainShopController implements Initializable {
     public void updateExistingComment() {
         TreeItem<Comment> selectedComment = (TreeItem<Comment>) commentTreeView.getSelectionModel().getSelectedItem();
         Comment comment = customHibernate.readEntityById(Comment.class, selectedComment.getValue().getId());
-        comment.setCommentTitle(commentTitleField.getText());
-        comment.setCommentBody(commentBodyField.getText());
-        customHibernate.update(comment);
-        loadCommentTree();
+
+        if (canModifyComment(comment, currentUser)) {
+            comment.setCommentTitle(commentTitleField.getText());
+            comment.setCommentBody(commentBodyField.getText());
+            customHibernate.update(comment);
+            loadCommentTree();
+        } else {
+            JavaFxCustomUtils.generateAlert(Alert.AlertType.ERROR, "Access denied", "You have no access to this comment", "Please, contact your administrator");
+        }
     }
 
     public void deleteExistingComment() {
         TreeItem<Comment> selectedComment = (TreeItem<Comment>) commentTreeView.getSelectionModel().getSelectedItem();
-        customHibernate.deleteComment(selectedComment.getValue().getId());
-        loadCommentTree();
+        Comment comment = customHibernate.readEntityById(Comment.class, selectedComment.getValue().getId());
+
+        if (canModifyComment(comment, currentUser)) {
+            customHibernate.deleteComment(selectedComment.getValue().getId());
+            loadCommentTree();
+        } else {
+            JavaFxCustomUtils.generateAlert(Alert.AlertType.ERROR, "Access denied", "You have no access to this comment", "Please, contact your administrator");
+        }
     }
 
+    private boolean canModifyComment(Comment comment, User currentUser) {
+        if (comment.getUser().equals(currentUser)) {
+            return true;
+        }
+
+        if (currentUser instanceof Manager) {
+            Manager manager = (Manager) currentUser;
+            return manager.isAdministrator();
+        }
+
+        return false;
+    }
 
 
     public void exitShop() {

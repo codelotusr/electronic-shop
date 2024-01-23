@@ -4,6 +4,7 @@ import com.coursework.eshop.StartGui;
 import com.coursework.eshop.hibernateController.CustomHibernate;
 import com.coursework.eshop.hibernateController.EntityManagerFactorySingleton;
 import com.coursework.eshop.model.Comment;
+import com.coursework.eshop.model.Manager;
 import com.coursework.eshop.model.Product;
 import com.coursework.eshop.model.User;
 import jakarta.persistence.EntityManagerFactory;
@@ -13,6 +14,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
@@ -49,7 +51,30 @@ public class CommentTreeController implements Initializable {
 
     public void deleteComment() {
         TreeItem<Comment> commentTreeItem = commentsTree.getSelectionModel().getSelectedItem();
-        customHibernate.deleteComment(commentTreeItem.getValue().getId());
+        if (commentTreeItem != null) {
+            Comment comment = commentTreeItem.getValue();
+
+            if (canModifyComment(comment, currentUser)) {
+                customHibernate.deleteComment(comment.getId());
+            } else {
+                JavaFxCustomUtils.generateAlert(Alert.AlertType.ERROR, "Error", "You cannot delete this comment", "You are not the owner of this comment");
+            }
+        }
+        loadComments();
+    }
+
+
+    private boolean canModifyComment(Comment comment, User currentUser) {
+        if (comment.getUser().equals(currentUser)) {
+            return true;
+        }
+
+        if (currentUser instanceof Manager) {
+            Manager manager = (Manager) currentUser;
+            return manager.isAdministrator();
+        }
+
+        return false;
     }
 
     public void reply() throws IOException {
@@ -64,7 +89,7 @@ public class CommentTreeController implements Initializable {
         stage.setScene(scene);
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.showAndWait();
-
+        loadComments();
     }
 
     public void loadComments() {
@@ -92,6 +117,7 @@ public class CommentTreeController implements Initializable {
         stage.setScene(scene);
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.showAndWait();
+        loadComments();
     }
 
 

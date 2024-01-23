@@ -47,6 +47,7 @@ public class CommentFormController {
             parentComment.getReplies().add(reply);
             genericHib.update(parentComment);
         }
+        commentTitleField.getScene().getWindow().hide();
 
     }
 
