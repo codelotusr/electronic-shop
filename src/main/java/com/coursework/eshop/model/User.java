@@ -32,6 +32,9 @@ public abstract class User implements Serializable {
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
     @LazyCollection(LazyCollectionOption.FALSE)
     List<Cart> myCarts;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @LazyCollection(LazyCollectionOption.FALSE)
+    List<Comment> myComments;
 
     public User(String login, String password, LocalDate birthDate, String name, String surname) {
         this.username = login;

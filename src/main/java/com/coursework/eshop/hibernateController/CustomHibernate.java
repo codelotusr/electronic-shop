@@ -68,33 +68,6 @@ public class CustomHibernate extends GenericHibernate {
         }
     }
 
-    public void deleteComment(int id) {
-        EntityManager em = getEntityManager();
-        try {
-            em.getTransaction().begin();
-            var comment = em.find(Comment.class, id);
-
-            if (comment.getClass() == Review.class) {
-                Review review = (Review) comment;
-                Product product = em.find(Product.class, review.getProduct().getId());
-                product.getReviews().remove(review);
-                em.merge(product);
-            } else {
-                comment.getReplies().clear();
-                em.remove(comment);
-
-            }
-            em.getTransaction().commit();
-        } catch (Exception e) {
-            JavaFxCustomUtils.generateAlert(
-                    javafx.scene.control.Alert.AlertType.ERROR,
-                    "Error",
-                    "Error",
-                    "Error while deleting comment");
-        } finally {
-            if (em != null) em.close();
-        }
-    }
 
     public void deleteWarehouse(int id) {
         EntityManager entityManager = getEntityManager();
@@ -288,5 +261,54 @@ public class CustomHibernate extends GenericHibernate {
         } finally {
             if (entityManager != null) entityManager.close();
         }
+    }
+
+    public void deleteComment(int id) {
+        EntityManager entityManager = getEntityManager();
+        try {
+            entityManager.getTransaction().begin();
+            Comment comment = entityManager.find(Comment.class, id);
+            deleteCommentAndReplies(entityManager, comment);
+            entityManager.getTransaction().commit();
+        } catch (Exception e) {
+            if (entityManager.getTransaction().isActive()) {
+                entityManager.getTransaction().rollback();
+            }
+            JavaFxCustomUtils.generateAlert(
+                    javafx.scene.control.Alert.AlertType.ERROR,
+                    "Error",
+                    "Error",
+                    "Error while deleting comment");
+            e.printStackTrace();
+        } finally {
+            if (entityManager != null) {
+                entityManager.close();
+            }
+        }
+    }
+
+    private void deleteCommentAndReplies(EntityManager em, Comment comment) {
+        if (comment == null) return;
+
+        if (!em.contains(comment)) {
+            comment = em.merge(comment);
+        }
+
+        for (Comment reply : new ArrayList<>(comment.getReplies())) {
+            deleteCommentAndReplies(em, reply);
+        }
+
+        if (comment.getParentComment() != null) {
+            comment.getParentComment().getReplies().remove(comment);
+            em.merge(comment.getParentComment());
+        }
+
+        User user = comment.getUser();
+        if (user != null) {
+            user.getMyComments().remove(comment);
+            em.merge(user);
+        }
+
+        em.remove(comment);
     }
 }

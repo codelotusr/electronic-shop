@@ -21,6 +21,7 @@ import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -236,6 +237,7 @@ public class MainShopController implements Initializable {
             tabPane.getTabs().remove(usersTab);
             tabPane.getTabs().remove(ordersTab);
             tabPane.getTabs().remove(productTab);
+            tabPane.getTabs().remove(statisticsTab);
         } else {
             JavaFxCustomUtils.generateAlert(
                     Alert.AlertType.ERROR,
@@ -887,5 +889,12 @@ public class MainShopController implements Initializable {
         comment.getReplies().forEach(sub -> addTreeItem(sub, treeItem));
     }
 
+    public void showCommentInfo() {
+        TreeItem<Comment> selectedComment = (TreeItem<Comment>) commentTreeView.getSelectionModel().getSelectedItem();
+        if (selectedComment != null) {
+            commentTitleField.setText(selectedComment.getValue().getCommentTitle());
+            commentBodyField.setText(selectedComment.getValue().getCommentBody());
+        }
+    }
 }
 

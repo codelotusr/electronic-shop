@@ -135,7 +135,7 @@
                         <Button layoutX="43.0" layoutY="306.0" mnemonicParsing="false" onAction="#addNewComment" prefHeight="25.0" prefWidth="74.0" text="Add" />
                         <Button layoutX="241.0" layoutY="306.0" mnemonicParsing="false" onAction="#updateExistingComment" prefHeight="25.0" prefWidth="69.0" text="Update" />
                         <Button layoutX="472.0" layoutY="306.0" mnemonicParsing="false" onAction="#deleteExistingComment" prefHeight="25.0" prefWidth="64.0" text="Delete" />
-                        <TreeView fx:id="commentTreeView" layoutX="241.0" layoutY="22.0" prefHeight="249.0" prefWidth="318.0" />
+                        <TreeView fx:id="commentTreeView" layoutX="241.0" layoutY="22.0" onMouseClicked="#showCommentInfo" prefHeight="249.0" prefWidth="318.0" />
                      </children>
                   </AnchorPane>
               </content>
