@@ -13,6 +13,7 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TreeView?>
 <?import javafx.scene.layout.AnchorPane?>
 
 <AnchorPane fx:id="mainAnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.coursework.eshop.fxController.MainShopController">
@@ -31,6 +32,7 @@
                         <Label layoutX="229.0" layoutY="203.0" text="Cart price:" AnchorPane.bottomAnchor="142.4" AnchorPane.leftAnchor="228.80000000000004" AnchorPane.rightAnchor="307.80000000000007" AnchorPane.topAnchor="203.0" />
                         <Label fx:id="totalPriceLabel" layoutX="292.0" layoutY="202.0" text="0" />
                         <Label layoutX="229.0" layoutY="6.0" text="Items in cart:" />
+                        <Button layoutX="333.0" layoutY="286.0" mnemonicParsing="false" onAction="#leaveReview" prefHeight="48.0" prefWidth="121.0" text="Write a review" AnchorPane.bottomAnchor="29.0" AnchorPane.leftAnchor="333.0" AnchorPane.rightAnchor="137.0" AnchorPane.topAnchor="286.0" />
                      </children></AnchorPane>
             </content>
           </Tab>
@@ -130,10 +132,10 @@
                      <children>
                         <TextField fx:id="commentTitleField" layoutX="29.0" layoutY="22.0" prefHeight="25.0" prefWidth="200.0" promptText="Title" />
                         <TextArea fx:id="commentBodyField" layoutX="29.0" layoutY="70.0" prefHeight="200.0" prefWidth="200.0" promptText="Comment" />
-                        <ListView fx:id="commentList" layoutX="252.0" layoutY="22.0" onMouseClicked="#selectComment" prefHeight="247.0" prefWidth="321.0" />
                         <Button layoutX="43.0" layoutY="306.0" mnemonicParsing="false" onAction="#addNewComment" prefHeight="25.0" prefWidth="74.0" text="Add" />
                         <Button layoutX="241.0" layoutY="306.0" mnemonicParsing="false" onAction="#updateExistingComment" prefHeight="25.0" prefWidth="69.0" text="Update" />
                         <Button layoutX="472.0" layoutY="306.0" mnemonicParsing="false" onAction="#deleteExistingComment" prefHeight="25.0" prefWidth="64.0" text="Delete" />
+                        <TreeView fx:id="commentTreeView" layoutX="241.0" layoutY="22.0" prefHeight="249.0" prefWidth="318.0" />
                      </children>
                   </AnchorPane>
               </content>

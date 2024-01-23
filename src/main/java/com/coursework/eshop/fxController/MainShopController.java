@@ -188,6 +188,8 @@ public class MainShopController implements Initializable {
     public DatePicker toField;
     @FXML
     public PieChart cartValuePieChart;
+    @FXML
+    public TreeView commentTreeView;
 
 
     @FXML
@@ -218,11 +220,6 @@ public class MainShopController implements Initializable {
     private void loadWarehouseList() {
         warehouseList.getItems().clear();
         warehouseList.getItems().addAll(customHibernate.readAllRecords(Warehouse.class));
-    }
-
-    private void loadCommentList() {
-        commentList.getItems().clear();
-        commentList.getItems().addAll(customHibernate.readAllRecords(Comment.class));
     }
 
 
@@ -441,7 +438,7 @@ public class MainShopController implements Initializable {
         } else if (warehouseTab.isSelected()) {
             loadWarehouseList();
         } else if (commentTab.isSelected()) {
-            loadCommentList();
+            loadCommentTree();
         } else if (usersTab.isSelected()) {
             loadUserTables();
             customerTable.refresh();
@@ -666,31 +663,30 @@ public class MainShopController implements Initializable {
     }
 
     public void addNewComment() {
-        customHibernate.create(new Comment(commentTitleField.getText(), commentBodyField.getText()));
-        loadCommentList();
+        TreeItem<Comment> selectedComment = (TreeItem<Comment>) commentTreeView.getSelectionModel().getSelectedItem();
+        if (selectedComment == null)
+            customHibernate.create(new Comment(commentTitleField.getText(), commentBodyField.getText(), this.currentUser));
+        else
+            customHibernate.create(new Comment(commentTitleField.getText(), commentBodyField.getText(), selectedComment.getValue(), this.currentUser));
+        loadCommentTree();
     }
 
     public void updateExistingComment() {
-        Comment selectedComment = commentList.getSelectionModel().getSelectedItem();
-        Comment comment = customHibernate.readEntityById(Comment.class, selectedComment.getId());
+        TreeItem<Comment> selectedComment = (TreeItem<Comment>) commentTreeView.getSelectionModel().getSelectedItem();
+        Comment comment = customHibernate.readEntityById(Comment.class, selectedComment.getValue().getId());
         comment.setCommentTitle(commentTitleField.getText());
         comment.setCommentBody(commentBodyField.getText());
         customHibernate.update(comment);
-        loadCommentList();
+        loadCommentTree();
     }
 
     public void deleteExistingComment() {
-        Comment selectedComment = commentList.getSelectionModel().getSelectedItem();
-        customHibernate.deleteComment(selectedComment.getId());
-        loadCommentList();
+        TreeItem<Comment> selectedComment = (TreeItem<Comment>) commentTreeView.getSelectionModel().getSelectedItem();
+        customHibernate.deleteComment(selectedComment.getValue().getId());
+        loadCommentTree();
     }
 
-    public void selectComment() {
-        Comment selectedComment = commentList.getSelectionModel().getSelectedItem();
-        commentTitleField.setText(selectedComment.getCommentTitle());
-        commentBodyField.setText(selectedComment.getCommentBody());
 
-    }
 
     public void exitShop() {
         System.exit(0);
@@ -836,7 +832,6 @@ public class MainShopController implements Initializable {
                 userId = Integer.parseInt(userIdField.getText());
             }
 
-            // Parse dates
             fromDate = fromField.getValue();
             toDate = toField.getValue();
 
@@ -866,5 +861,33 @@ public class MainShopController implements Initializable {
         JavaFxCustomUtils.generateAlert(Alert.AlertType.ERROR, "Error", "Error occurred while filtering data", "Please check your input");
 
     }
-    }}
+    }
+
+    public void leaveReview() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(StartGui.class.getResource("commentTree.fxml"));
+        Parent parent = fxmlLoader.load();
+        CommentTreeController commentTree = fxmlLoader.getController();
+        commentTree.setData(customHibernate, currentUser);
+        Stage stage = (Stage) productList.getScene().getWindow();
+        Scene scene = new Scene(parent);
+        stage.setTitle("Shop");
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    private void loadCommentTree() {
+        List<Comment> comments = customHibernate.readAllRootComments();
+        commentTreeView.setRoot(new TreeItem<>());
+        commentTreeView.setShowRoot(false);
+        commentTreeView.getRoot().setExpanded(true);
+        comments.forEach(comment -> addTreeItem(comment, commentTreeView.getRoot()));
+    }
+
+    private void addTreeItem(Comment comment, TreeItem<Comment> parentComment) {
+        TreeItem<Comment> treeItem = new TreeItem<>(comment);
+        parentComment.getChildren().add(treeItem);
+        comment.getReplies().forEach(sub -> addTreeItem(sub, treeItem));
+    }
+
+}
 

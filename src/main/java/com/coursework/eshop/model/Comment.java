@@ -29,24 +29,28 @@ public class Comment {
     private List<Comment> replies;
     @ManyToOne
     private Comment parentComment;
+    @ManyToOne
+    private User user;
 
-    public Comment(String commentTitle, String commentBody) {
+    public Comment(String commentTitle, String commentBody, User user) {
         this.commentTitle = commentTitle;
         this.commentBody = commentBody;
         this.dateCreated = LocalDate.now();
+        this.user = user;
         this.replies = new ArrayList<>();
     }
 
-    public Comment(String commentTitle, String commentBody, Comment parentComment) {
+    public Comment(String commentTitle, String commentBody, Comment parentComment, User user) {
         this.commentTitle = commentTitle;
         this.commentBody = commentBody;
         this.dateCreated = LocalDate.now();
+        this.user = user;
         this.parentComment = parentComment;
         this.replies = new ArrayList<>();
     }
 
     @Override
     public String toString() {
-        return commentTitle + ":" + dateCreated;
+        return user.getFirstName() + " " + user.getLastName() + ":" + commentTitle + ":" + dateCreated;
     }
 }

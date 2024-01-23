@@ -266,4 +266,27 @@ public class CustomHibernate extends GenericHibernate {
         }
         return result;
     }
+
+    public List<Comment> readAllRootComments() {
+        EntityManager entityManager = getEntityManager();
+        try {
+            CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+            CriteriaQuery<Comment> query = cb.createQuery(Comment.class);
+            Root<Comment> root = query.from(Comment.class);
+
+            query.select(root).where(cb.isNull(root.get("parentComment")));
+
+            TypedQuery<Comment> typedQuery = entityManager.createQuery(query);
+            return typedQuery.getResultList();
+        } catch (NoResultException e) {
+            JavaFxCustomUtils.generateAlert(
+                    javafx.scene.control.Alert.AlertType.ERROR,
+                    "Error",
+                    "Error",
+                    "Error while getting root comments");
+            return null;
+        } finally {
+            if (entityManager != null) entityManager.close();
+        }
+    }
 }

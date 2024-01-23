@@ -17,8 +17,8 @@ public class Review extends Comment {
     @ManyToOne
     private Product product;
 
-    public Review(String commentTitle, String commentBody, double rating, Product product) {
-        super(commentTitle, commentBody);
+    public Review(String commentTitle, String commentBody, User user, double rating, Product product) {
+        super(commentTitle, commentBody, user);
         this.rating = rating;
         this.product = product;
     }
