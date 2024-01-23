@@ -5,7 +5,6 @@ import com.coursework.eshop.hibernateController.CustomHibernate;
 import com.coursework.eshop.hibernateController.EntityManagerFactorySingleton;
 import com.coursework.eshop.model.Comment;
 import com.coursework.eshop.model.Product;
-import com.coursework.eshop.model.Review;
 import com.coursework.eshop.model.User;
 import jakarta.persistence.EntityManagerFactory;
 import javafx.event.ActionEvent;
@@ -73,18 +72,13 @@ public class CommentTreeController implements Initializable {
         commentsTree.setRoot(new TreeItem<>());
         commentsTree.setShowRoot(false);
         commentsTree.getRoot().setExpanded(true);
-
-        selectedProduct.getReviews().stream()
-                .filter(comment -> comment instanceof Review)
-                .forEach(review -> addTreeItem(review, commentsTree.getRoot()));
+        selectedProduct.getReviews().forEach(comment -> addTreeItem(comment, commentsTree.getRoot()));
     }
 
     private void addTreeItem(Comment comment, TreeItem<Comment> parentComment) {
         TreeItem<Comment> treeItem = new TreeItem<>(comment);
         parentComment.getChildren().add(treeItem);
-        comment.getReplies().stream()
-                .filter(reply -> reply instanceof Review)
-                .forEach(reply -> addTreeItem(reply, treeItem));
+        comment.getReplies().forEach(sub -> addTreeItem(sub, treeItem));
     }
 
     public void loadResponseForm() throws IOException {
