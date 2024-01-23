@@ -885,13 +885,17 @@ public class MainShopController implements Initializable {
         commentTreeView.setRoot(new TreeItem<>());
         commentTreeView.setShowRoot(false);
         commentTreeView.getRoot().setExpanded(true);
-        comments.forEach(comment -> addTreeItem(comment, commentTreeView.getRoot()));
+        comments.stream()
+                .filter(comment -> !(comment instanceof Review))
+                .forEach(comment -> addTreeItem(comment, commentTreeView.getRoot()));
     }
 
     private void addTreeItem(Comment comment, TreeItem<Comment> parentComment) {
         TreeItem<Comment> treeItem = new TreeItem<>(comment);
         parentComment.getChildren().add(treeItem);
-        comment.getReplies().forEach(sub -> addTreeItem(sub, treeItem));
+        comment.getReplies().stream()
+                .filter(reply -> !(reply instanceof Review))
+                .forEach(sub -> addTreeItem(sub, treeItem));
     }
 
     public void showCommentInfo() {
