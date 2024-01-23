@@ -309,6 +309,15 @@ public class CustomHibernate extends GenericHibernate {
             em.merge(user);
         }
 
+        if (comment instanceof Review) {
+            Review review = (Review) comment;
+            Product product = review.getProduct();
+            if (product != null) {
+                product.getReviews().remove(review);
+                em.merge(product);
+            }
+        }
+
         em.remove(comment);
     }
 }

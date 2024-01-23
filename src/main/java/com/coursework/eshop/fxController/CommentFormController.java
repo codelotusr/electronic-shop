@@ -6,6 +6,7 @@ import com.coursework.eshop.model.Product;
 import com.coursework.eshop.model.Review;
 import com.coursework.eshop.model.User;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -17,6 +18,8 @@ public class CommentFormController {
     public TextArea commentBodyField;
     @FXML
     public Slider ratingField;
+    @FXML
+    public Label ratingLabel;
 
     private int productId = 0;
     private int commentId = 0;
@@ -45,6 +48,15 @@ public class CommentFormController {
             genericHib.update(parentComment);
         }
 
+    }
+
+    @FXML
+    public void initialize() {
+        ratingField.valueProperty().addListener((obs, oldVal, newVal) -> {
+            int roundedValue = (int) Math.round(newVal.doubleValue());
+            ratingLabel.setText("Rating: " + roundedValue);
+            ratingField.setValue(roundedValue);
+        });
     }
 }
 
