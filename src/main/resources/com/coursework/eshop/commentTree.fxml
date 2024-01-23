@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ContextMenu?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.TreeView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.coursework.eshop.fxController.CommentTreeController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.coursework.eshop.fxController.CommentTreeController">
     <children>
         <TreeView fx:id="commentsTree" layoutX="347.0" layoutY="15.0" prefHeight="371.0" prefWidth="219.0">
             <contextMenu>
@@ -18,13 +19,14 @@
                 </ContextMenu>
             </contextMenu>
         </TreeView>
-        <ListView fx:id="productList" layoutX="21.0" layoutY="14.0" onMouseClicked="#loadComments" prefHeight="371.0" prefWidth="219.0">
+        <ListView fx:id="productListReview" layoutX="21.0" layoutY="14.0" onMouseClicked="#loadComments" prefHeight="371.0" prefWidth="219.0">
             <contextMenu>
                 <ContextMenu>
                     <items>
-                        <MenuItem mnemonicParsing="false" text="Add review" onAction="#loadResponseForm"/>
+                        <MenuItem mnemonicParsing="false" onAction="#loadResponseForm" text="Add review" />
                     </items>
                 </ContextMenu>
             </contextMenu></ListView>
+      <Button layoutX="254.0" layoutY="338.0" mnemonicParsing="false" onAction="#returnToMainShop" prefHeight="48.0" prefWidth="77.0" text="Return" />
     </children>
 </AnchorPane>

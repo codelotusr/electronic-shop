@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.coursework.eshop.fxController.CommentFormController"
-            prefHeight="400.0" prefWidth="600.0">
-
+<AnchorPane prefHeight="403.0" prefWidth="275.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.coursework.eshop.fxController.CommentFormController">
+    <children>
+        <Button layoutX="119.0" layoutY="342.0" mnemonicParsing="false" onAction="#saveData" text="Save" />
+        <TextField fx:id="commentTitleField" layoutX="39.0" layoutY="67.0" prefHeight="25.0" prefWidth="200.0" />
+        <TextArea fx:id="commentBodyField" layoutX="39.0" layoutY="116.0" prefHeight="200.0" prefWidth="200.0" />
+        <Slider fx:id="ratingField" layoutX="39.0" layoutY="28.0" prefHeight="10.0" prefWidth="200.0" />
+    </children>
 </AnchorPane>

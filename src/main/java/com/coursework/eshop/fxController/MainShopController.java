@@ -868,7 +868,12 @@ public class MainShopController implements Initializable {
         Parent parent = fxmlLoader.load();
         CommentTreeController commentTree = fxmlLoader.getController();
         commentTree.setData(customHibernate, currentUser);
-        Stage stage = (Stage) productList.getScene().getWindow();
+        var stage = new Stage();
+        if (primaryTab.isSelected()) {
+            stage = (Stage) productList.getScene().getWindow();
+        } else if (productTab.isSelected()) {
+            stage = (Stage) productListManager.getScene().getWindow();
+        }
         Scene scene = new Scene(parent);
         stage.setTitle("Shop");
         stage.setScene(scene);

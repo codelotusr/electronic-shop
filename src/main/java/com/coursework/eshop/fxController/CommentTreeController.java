@@ -2,9 +2,12 @@ package com.coursework.eshop.fxController;
 
 import com.coursework.eshop.StartGui;
 import com.coursework.eshop.hibernateController.CustomHibernate;
+import com.coursework.eshop.hibernateController.EntityManagerFactorySingleton;
 import com.coursework.eshop.model.Comment;
 import com.coursework.eshop.model.Product;
 import com.coursework.eshop.model.User;
+import jakarta.persistence.EntityManagerFactory;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -20,11 +23,12 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+
 public class CommentTreeController implements Initializable {
     @FXML
     public TreeView<Comment> commentsTree;
     @FXML
-    public ListView<Product> productList;
+    public ListView<Product> productListReview;
 
     private CustomHibernate customHibernate;
     private User currentUser;
@@ -36,8 +40,11 @@ public class CommentTreeController implements Initializable {
     }
 
     private void loadProducts() {
-        productList.getItems().clear();
-        productList.getItems().addAll(customHibernate.readAllRecords(Product.class));
+        if (productListReview.getItems() != null) {
+            productListReview.getItems().clear();
+        }
+        productListReview.getItems().addAll(customHibernate.readAllRecords(Product.class));
+
     }
 
     public void deleteComment() {
@@ -61,7 +68,7 @@ public class CommentTreeController implements Initializable {
     }
 
     public void loadComments() {
-        Product selectedProduct = customHibernate.readEntityById(Product.class, productList.getSelectionModel().getSelectedItem().getId());
+        Product selectedProduct = customHibernate.readEntityById(Product.class, productListReview.getSelectionModel().getSelectedItem().getId());
         commentsTree.setRoot(new TreeItem<>());
         commentsTree.setShowRoot(false);
         commentsTree.getRoot().setExpanded(true);
@@ -78,7 +85,7 @@ public class CommentTreeController implements Initializable {
         FXMLLoader fxmlLoader = new FXMLLoader(StartGui.class.getResource("commentForm.fxml"));
         Parent parent = fxmlLoader.load();
         CommentFormController commentForm = fxmlLoader.getController();
-        commentForm.setData(customHibernate, productList.getSelectionModel().getSelectedItem().getId(), 0, currentUser);
+        commentForm.setData(customHibernate, productListReview.getSelectionModel().getSelectedItem().getId(), 0, currentUser);
         Stage stage = new Stage();
         Scene scene = new Scene(parent);
         stage.setTitle("Shop");
@@ -91,5 +98,17 @@ public class CommentTreeController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
+    }
+
+    public void returnToMainShop() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(StartGui.class.getResource("main-shop.fxml"));
+        Parent parent = fxmlLoader.load();
+        MainShopController mainShopController = fxmlLoader.getController();
+        mainShopController.setData(EntityManagerFactorySingleton.getEntityManagerFactory(), currentUser);
+        Scene scene = new Scene(parent);
+        Stage stage = (Stage) productListReview.getScene().getWindow();
+        stage.setTitle("Shop");
+        stage.setScene(scene);
+        stage.show();
     }
 }
