@@ -88,12 +88,14 @@
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                         <TableView fx:id="cartTable" prefHeight="379.0" prefWidth="572.0" AnchorPane.bottomAnchor="-16.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="19.200000000000045" AnchorPane.topAnchor="0.0">
                             <columns>
-                                <TableColumn fx:id="cartIdColumn" prefWidth="60.79998779296875" text="ID" />
-                                <TableColumn fx:id="dateCreatedColumn" prefWidth="92.0" text="Date Created" />
-                                <TableColumn fx:id="cartValueColumn" prefWidth="83.20001220703125" text="Cart Value" />
-                                <TableColumn fx:id="userIdColumn" minWidth="0.0" prefWidth="63.20001220703125" text="User ID" />
-                                <TableColumn fx:id="completedColumn" prefWidth="82.4000244140625" text="Completed" />
-                           <TableColumn fx:id="cartDummyColumn" prefWidth="75.0" text="Action" />
+                                <TableColumn fx:id="cartIdColumn" prefWidth="44.0" text="ID" />
+                                <TableColumn fx:id="dateCreatedColumn" prefWidth="97.0" text="Date Created" />
+                                <TableColumn fx:id="cartValueColumn" prefWidth="73.0" text="Cart Value" />
+                                <TableColumn fx:id="userIdColumn" minWidth="0.0" prefWidth="57.0" text="User ID" />
+                           <TableColumn fx:id="cartManagerIdColumn" prefWidth="72.0" text="Manager ID" />
+                                <TableColumn fx:id="cartStatusColumn" prefWidth="79.0" text="Status" />
+                           <TableColumn fx:id="cartDummyColumn" prefWidth="63.0" text="Delete" />
+                           <TableColumn fx:id="cartManageOrderColumn" prefWidth="86.0" text="Manage" />
 
                             </columns>
                         </TableView>

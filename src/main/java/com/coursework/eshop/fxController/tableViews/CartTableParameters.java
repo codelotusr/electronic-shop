@@ -1,9 +1,6 @@
 package com.coursework.eshop.fxController.tableViews;
 
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.*;
 
 import java.time.LocalDate;
 
@@ -12,14 +9,16 @@ public class CartTableParameters {
     SimpleObjectProperty<LocalDate> dateCreated = new SimpleObjectProperty<>();
     SimpleDoubleProperty cartValue = new SimpleDoubleProperty();
     SimpleIntegerProperty ownerId = new SimpleIntegerProperty();
-    SimpleBooleanProperty isCompleted = new SimpleBooleanProperty();
+    SimpleStringProperty cartStatus = new SimpleStringProperty();
+    SimpleObjectProperty<Integer> cartManagerId = new SimpleObjectProperty<>();
 
-    public CartTableParameters(int cartId, LocalDate dateCreated, double cartValue, int ownerId, boolean isCompleted) {
+    public CartTableParameters(int cartId, LocalDate dateCreated, double cartValue, int ownerId, String cartStatus, Integer cartManagerId) {
         this.cartId.set(cartId);
         this.dateCreated.set(dateCreated);
         this.cartValue.set(cartValue);
         this.ownerId.set(ownerId);
-        this.isCompleted.set(isCompleted);
+        this.cartStatus.set(cartStatus);
+        this.cartManagerId.set(cartManagerId != null ? cartManagerId : -1);
     }
 
     public CartTableParameters() {
@@ -74,17 +73,31 @@ public class CartTableParameters {
         this.ownerId.set(ownerId);
     }
 
-    public boolean isIsCompleted() {
-        return isCompleted.get();
+    public String getCartStatus() {
+        return cartStatus.get();
     }
 
-    public SimpleBooleanProperty isCompletedProperty() {
-        return isCompleted;
+    public SimpleStringProperty cartStatusProperty() {
+        return cartStatus;
     }
 
-    public void setIsCompleted(boolean isCompleted) {
-        this.isCompleted.set(isCompleted);
+    public void setCartStatus(String cartStatus) {
+        this.cartStatus.set(cartStatus);
     }
+
+    public Integer getCartManagerId() {
+        return cartManagerId.get();
+    }
+
+    public SimpleObjectProperty<Integer> cartManagerIdProperty() {
+        return cartManagerId;
+    }
+
+    public void setCartManagerId(Integer cartManagerId) {
+        this.cartManagerId.set(cartManagerId);
+    }
+
+
 
 
 }

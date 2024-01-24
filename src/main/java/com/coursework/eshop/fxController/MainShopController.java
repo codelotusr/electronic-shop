@@ -189,6 +189,10 @@ public class MainShopController implements Initializable {
     public PieChart cartValuePieChart;
     @FXML
     public TreeView commentTreeView;
+    @FXML
+    public TableColumn<CartTableParameters, Manager> cartManagerIdColumn;
+    @FXML
+    public TableColumn<CartTableParameters, String> cartStatusColumn;
 
 
     @FXML
@@ -388,14 +392,15 @@ public class MainShopController implements Initializable {
             customHibernate.update(cart);
         });
         userIdColumn.setCellValueFactory(new PropertyValueFactory<>("ownerId"));
-        completedColumn.setCellValueFactory(new PropertyValueFactory<>("isCompleted"));
-        completedColumn.setCellFactory(TextFieldTableCell.forTableColumn(new BooleanStringConverter()));
-        completedColumn.setOnEditCommit(event -> {
-            event.getTableView().getItems().get(event.getTablePosition().getRow()).setIsCompleted(event.getNewValue());
+        cartStatusColumn.setCellValueFactory(new PropertyValueFactory<>("cartStatus"));
+        cartStatusColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        cartStatusColumn.setOnEditCommit(event -> {
+            event.getTableView().getItems().get(event.getTablePosition().getRow()).setCartStatus(event.getNewValue());
             Cart cart = customHibernate.readEntityById(Cart.class, event.getTableView().getItems().get(event.getTablePosition().getRow()).getCartId());
-            cart.setCompleted(event.getNewValue());
+            cart.setCartStatus(event.getNewValue());
             customHibernate.update(cart);
         });
+        cartManagerIdColumn.setCellValueFactory(new PropertyValueFactory<>("cartManagerId"));
         Callback<TableColumn<CartTableParameters, Void>, TableCell<CartTableParameters, Void>> callback = param -> {
             return new TextFieldTableCell<>() {
                 private final Button deleteButton = new Button("Delete");
@@ -775,6 +780,7 @@ public class MainShopController implements Initializable {
             newCart.setDateCreated(LocalDate.now());
             newCart.setOwner(currentUser);
             newCart.setItemsInCart(new ArrayList<>());
+            newCart.setManager(null);
             double totalValue = 0.0;
             for (Product product : productsInOrder) {
                 Product managedProduct = em.merge(product);
@@ -829,8 +835,9 @@ public class MainShopController implements Initializable {
                         cart.getDateCreated(),
                         cart.getCartValue(),
                         cart.getOwnerId(),
-                        cart.isCompleted()))
-                .collect(Collectors.toList());
+                        cart.getCartStatus(),
+                        cart.getManager() != null ? cart.getManager().getId() : -1)
+                ).collect(Collectors.toList());
 
         cartTableParametersObservableList.setAll(cartTableParams);
         cartTable.setItems(cartTableParametersObservableList);

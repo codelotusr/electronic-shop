@@ -23,7 +23,7 @@ public class Cart {
     private int id;
     private LocalDate dateCreated;
     private double cart_value;
-    private boolean isCompleted;
+    private String cartStatus;
 
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
     @LazyCollection(LazyCollectionOption.FALSE)
@@ -31,13 +31,17 @@ public class Cart {
     @ManyToOne
     @JoinColumn(name = "customer_id", nullable = false)
     private User owner;
+    @ManyToOne
+    @JoinColumn(name = "manager_id")
+    private Manager manager;
 
-    public Cart(int id, double cart_value, User owner, boolean isCompleted) {
+    public Cart(int id, double cart_value, User owner, String cartStatus, Manager manager) {
         this.id = id;
         this.owner = owner;
         this.dateCreated = LocalDate.now();
         this.cart_value = cart_value;
-        this.isCompleted = isCompleted;
+        this.cartStatus = "Pending";
+        this.manager = manager;
     }
 
     public double getCartValue() {
