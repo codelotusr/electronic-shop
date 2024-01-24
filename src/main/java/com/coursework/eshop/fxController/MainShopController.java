@@ -193,6 +193,8 @@ public class MainShopController implements Initializable {
     public TableColumn<CartTableParameters, Manager> cartManagerIdColumn;
     @FXML
     public TableColumn<CartTableParameters, String> cartStatusColumn;
+    @FXML
+    public TableColumn<CartTableParameters, Void> cartManageOrderColumn;
 
 
     @FXML
@@ -425,6 +427,39 @@ public class MainShopController implements Initializable {
         cartDummyColumn.setCellFactory(callback);
 
 
+        cartManageOrderColumn.setCellFactory(param -> new TableCell<CartTableParameters, Void>() {
+            private final Button manageButton = new Button("Manage");
+
+            {
+                manageButton.setOnAction(event -> {
+                    CartTableParameters row = getTableView().getItems().get(getIndex());
+                    manageCart(row.getCartId());
+                });
+            }
+
+            @Override
+            public void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(manageButton);
+                }
+            }
+        });
+
+
+    }
+
+    private void manageCart(int cartId) {
+        Cart cart = customHibernate.readEntityById(Cart.class, cartId);
+        if (cart != null && currentUser instanceof Manager) {
+            cart.setManager((Manager) currentUser);
+            customHibernate.update(cart);
+            JavaFxCustomUtils.generateAlert(Alert.AlertType.INFORMATION, "Cart Managed", "You are now managing this cart.", "");
+        } else {
+            JavaFxCustomUtils.generateAlert(Alert.AlertType.ERROR, "Error", "Unable to manage cart.", "Please try again.");
+        }
     }
 
     private void cartStatisticsTableParams() {
