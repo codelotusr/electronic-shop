@@ -195,6 +195,8 @@ public class MainShopController implements Initializable {
     public TableColumn<CartTableParameters, String> cartStatusColumn;
     @FXML
     public TableColumn<CartTableParameters, Void> cartManageOrderColumn;
+    @FXML
+    public ComboBox productTypeComboBox;
 
 
     @FXML
@@ -463,10 +465,9 @@ public class MainShopController implements Initializable {
     }
 
     private void cartStatisticsTableParams() {
-        buyerColumn.setCellValueFactory(new PropertyValueFactory<>("buyerId"));
+        buyerColumn.setCellValueFactory(new PropertyValueFactory<>("customerId"));
         dateColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
         valueColumn.setCellValueFactory(new PropertyValueFactory<>("cartValue"));
-        ownerColumn.setCellValueFactory(new PropertyValueFactory<>("ownerId"));
     }
 
     public void loadTabValues() {
@@ -501,8 +502,8 @@ public class MainShopController implements Initializable {
             CartStatisticsTableParameters params = new CartStatisticsTableParameters(
                     cart.getOwnerId(),
                     cart.getDateCreated(),
-                    cart.getCartValue(),
-                    cart.getOwnerId());
+                    cart.getCartValue()
+            );
             cartStatisticsTableParametersObservableList.add(params);
         }
 

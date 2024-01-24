@@ -7,32 +7,30 @@ import javafx.beans.property.SimpleObjectProperty;
 import java.time.LocalDate;
 
 public class CartStatisticsTableParameters {
-    SimpleIntegerProperty buyerId = new SimpleIntegerProperty();
+    SimpleIntegerProperty customerId = new SimpleIntegerProperty();
     SimpleObjectProperty<LocalDate> date = new SimpleObjectProperty<>();
     SimpleDoubleProperty cartValue = new SimpleDoubleProperty();
-    SimpleIntegerProperty ownerId = new SimpleIntegerProperty();
 
-    public CartStatisticsTableParameters(int buyerId, LocalDate dates, double cartValue, int ownerId) {
-        this.buyerId.set(buyerId);
-        this.date.set(dates);
+    public CartStatisticsTableParameters(int customerId, LocalDate date, double cartValue) {
+        this.customerId.set(customerId);
+        this.date.set(date);
         this.cartValue.set(cartValue);
-        this.ownerId.set(ownerId);
     }
 
     public CartStatisticsTableParameters() {
 
     }
 
-    public int getBuyerId() {
-        return buyerId.get();
+    public int getCustomerId() {
+        return customerId.get();
     }
 
-    public SimpleIntegerProperty buyerIdProperty() {
-        return buyerId;
+    public SimpleIntegerProperty customerIdProperty() {
+        return customerId;
     }
 
-    public void setBuyerId(int buyerId) {
-        this.buyerId.set(buyerId);
+    public void setCustomerId(int customerId) {
+        this.customerId.set(customerId);
     }
 
     public LocalDate getDate() {
@@ -59,17 +57,6 @@ public class CartStatisticsTableParameters {
         this.cartValue.set(cartValue);
     }
 
-    public int getOwnerId() {
-        return ownerId.get();
-    }
-
-    public SimpleIntegerProperty ownerIdProperty() {
-        return ownerId;
-    }
-
-    public void setOwnerId(int ownerId) {
-        this.ownerId.set(ownerId);
-    }
-
-
 }
+
+

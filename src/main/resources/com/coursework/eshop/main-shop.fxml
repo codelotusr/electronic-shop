@@ -147,12 +147,11 @@
                 <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
 
-                        <TableView fx:id="cartData" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="314.0" AnchorPane.bottomAnchor="152.8" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="266.4000000000001" AnchorPane.topAnchor="10.0">
+                        <TableView fx:id="cartData" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="293.0" AnchorPane.bottomAnchor="153.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="288.0" AnchorPane.topAnchor="10.0">
                             <columns>
                                 <TableColumn fx:id="buyerColumn" text="ID" />
-                                <TableColumn fx:id="dateColumn" text="Date Created" />
-                                <TableColumn fx:id="valueColumn" text="Sales Value" />
-                                <TableColumn fx:id="ownerColumn" text="Owner ID" />
+                                <TableColumn fx:id="dateColumn" prefWidth="114.0" text="Date Created" />
+                                <TableColumn fx:id="valueColumn" prefWidth="95.0" text="Sales Value" />
                             </columns>
                         </TableView>
 

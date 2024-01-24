@@ -193,7 +193,7 @@ public class CustomHibernate extends GenericHibernate {
         }
     }
 
-    public List<Cart> filterData(double minCost, double maxCost, int userId, LocalDate fromDate, LocalDate toDate) {
+    public List<Cart> filterData(double minCost, double maxCost, int customerId, LocalDate fromDate, LocalDate toDate) {
         EntityManager em = null;
         List<Cart> result = new ArrayList<>();
         try {
@@ -203,6 +203,7 @@ public class CustomHibernate extends GenericHibernate {
 
             Root<Cart> cart = cq.from(Cart.class);
             Join<Cart, User> userJoin = cart.join("owner");
+            Join<Cart, Product> productJoin = cart.join("itemsInCart");
             List<Predicate> predicates = new ArrayList<>();
 
             if (minCost > 0) {
@@ -213,8 +214,8 @@ public class CustomHibernate extends GenericHibernate {
                 predicates.add(cb.le(cart.get("cart_value"), maxCost));
             }
 
-            if (userId > 0) {
-                predicates.add(cb.equal(userJoin.get("id"), userId));
+            if (customerId > 0) {
+                predicates.add(cb.equal(userJoin.get("id"), customerId));
             }
 
             if (fromDate != null) {
